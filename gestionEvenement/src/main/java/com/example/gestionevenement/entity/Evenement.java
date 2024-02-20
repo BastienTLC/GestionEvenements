@@ -19,34 +19,6 @@ public class Evenement {
     private Time duree;
     private Integer nombreMaxPersonne;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setNom(String nom) {
-        this.nom = nom;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public void setDuree(Time duree) {
-        this.duree = duree;
-    }
-
-    public void setNombreMaxPersonne(Integer nombreMaxPersonne) {
-        this.nombreMaxPersonne = nombreMaxPersonne;
-    }
-
-    public void setLieu(Lieu lieu) {
-        this.lieu = lieu;
-    }
-
-    public void setHeure(Time heure) {
-        this.heure = heure;
-    }
-
     @ManyToOne
     @JoinColumn(name = "lieu_id")
     private Lieu lieu;
@@ -78,6 +50,34 @@ public class Evenement {
 
     public Time getHeure() {
         return heure;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public void setDuree(Time duree) {
+        this.duree = duree;
+    }
+
+    public void setNombreMaxPersonne(Integer nombreMaxPersonne) {
+        this.nombreMaxPersonne = nombreMaxPersonne;
+    }
+
+    public void setLieu(Lieu lieu) {
+        this.lieu = lieu;
+    }
+
+    public void setHeure(Time heure) {
+        this.heure = heure;
     }
 
 
