@@ -128,8 +128,9 @@ public class MessagesServlet extends HttpServlet {
 			throws ServletException, IOException {
 		String idMembre = request.getParameter("userId");
 		String idEvent = request.getParameter("eventId");
+		String contenu = request.getParameter("contenu");
 			
-		if (idMembre!=null) {
+		if (idMembre!=null && contenu==null) {
 			List<Message> messagesClones = this.getMessagesMongoByMembreId(Integer.parseInt(idMembre));
 			
 			response.setContentType("application/json; charset=UTF-8");
@@ -142,7 +143,7 @@ public class MessagesServlet extends HttpServlet {
 			json += "]";
 			out.write(json);
 			out.close();
-		} else if (idEvent!=null) {
+		} else if (idEvent!=null && contenu==null) {
 			List<Message> messagesClones = this.getMessagesMongoByEventId(Integer.parseInt(idEvent));
 			
 			response.setContentType("application/json; charset=UTF-8");
@@ -155,7 +156,7 @@ public class MessagesServlet extends HttpServlet {
 			json += "]";
 			out.write(json);
 			out.close();
-		} else {
+		} else if (contenu==null) {
 			
 			List<Message> messagesClones = this.getListeMessagesMongoDB();
 			
@@ -169,6 +170,16 @@ public class MessagesServlet extends HttpServlet {
 			json += "]";
 			out.write(json);
 			out.close();
+		} else {
+		    
+		    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		    Date date = new Date();
+		    String datePublication = dateFormat.format(date);
+
+		    if (contenu != null && idMembre != null && idEvent != null) {
+		        insererMessageDansMongoDB(contenu, Integer.parseInt(idMembre), Integer.parseInt(idEvent), datePublication);
+		        
+		    }
 		}
 		
 	}
