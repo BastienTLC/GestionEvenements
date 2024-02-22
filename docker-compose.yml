@@ -7,7 +7,7 @@ services:
       context: ./gestionEvenement
       dockerfile: Dockerfile
     ports:
-      - "8080:8080"
+      - "8082:8082"
     restart: always
   
   membre-api:
@@ -16,7 +16,7 @@ services:
       context: ./gestionMembre
       dockerfile: Dockerfile
     ports:
-      - "8081:8080"  # Utiliser un autre port si nécessaire
+      - "8081:8081"  # Utiliser un autre port si nécessaire
     restart: always
 
 
