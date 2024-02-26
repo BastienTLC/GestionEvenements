@@ -16,7 +16,16 @@ services:
       context: ./gestionMembre
       dockerfile: Dockerfile
     ports:
-      - "8081:8081"  # Utiliser un autre port si nécessaire
+      - "8081:8081" 
+    restart: always
+
+  lieu-api:
+    container_name: lieu-api
+    build:
+      context: ./gestionLieu
+      dockerfile: Dockerfile
+    ports:
+      - "8083:8083"
     restart: always
 
 

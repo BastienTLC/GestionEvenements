@@ -7,4 +7,4 @@ COPY src ./src
 RUN mvn clean package spring-boot:repackage
 RUN ls -la target
 #COPY target/*.jar app.jar
-ENTRYPOINT ["java", "-jar", "./target/gestionMembre-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java", "-jar", "./target/gestionLieu-0.0.1-SNAPSHOT.jar"]
