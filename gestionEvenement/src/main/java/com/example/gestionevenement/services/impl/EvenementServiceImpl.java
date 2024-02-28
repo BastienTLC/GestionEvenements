@@ -1,6 +1,7 @@
 package com.example.gestionevenement.services.impl;
 
 import com.example.gestionevenement.dto.EvenementDto;
+import com.example.gestionevenement.dto.MembreDto;
 import com.example.gestionevenement.entity.Evenement;
 import com.example.gestionevenement.repository.EvenementRepository;
 import com.example.gestionevenement.services.EvenementService;
@@ -52,6 +53,7 @@ public class EvenementServiceImpl implements EvenementService {
     public void deleteEvenementById(Long id) {
         evenementRepository.deleteById(id);
     }
+
 
     /**
      * Map Evenement dto to Evenement entity

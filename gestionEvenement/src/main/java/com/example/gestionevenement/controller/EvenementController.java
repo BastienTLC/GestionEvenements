@@ -1,8 +1,11 @@
 package com.example.gestionevenement.controller;
 
 import com.example.gestionevenement.dto.EvenementDto;
+import com.example.gestionevenement.dto.MembreDto;
 import com.example.gestionevenement.entity.Evenement;
+import com.example.gestionevenement.entity.Inscription;
 import com.example.gestionevenement.services.EvenementService;
+import com.example.gestionevenement.services.InscriptionService;
 import com.example.gestionevenement.services.impl.EvenementServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,6 +22,8 @@ public class EvenementController {
 
     @Autowired
     private EvenementService evenementService;
+    @Autowired
+    private InscriptionService inscriptionService;
 
     public EvenementController(EvenementServiceImpl evenementService) {
         this.evenementService = evenementService;
@@ -68,5 +73,11 @@ public class EvenementController {
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+
+    @GetMapping("/{id}/participants")
+    public ResponseEntity<List<MembreDto>> getParticipantsOfEvenement(@PathVariable("id") Long id) {
+        List<MembreDto> participants = inscriptionService.getParticipantsOfEvenement(id);
+        return new ResponseEntity<>(participants, HttpStatus.OK);
     }
 }

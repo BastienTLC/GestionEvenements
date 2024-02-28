@@ -19,5 +19,8 @@ export default {
     },
     deleteEvenement(id) {
         return axios.delete(`${API_URL}/${id}`);
+    },
+    getEvenementMembers(id) {
+        return axios.get(`${API_URL}/${id}/participants`);
     }
 }
