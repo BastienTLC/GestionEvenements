@@ -19,9 +19,7 @@ public class Evenement {
     private Time duree;
     private Integer nombreMaxPersonne;
 
-    @ManyToOne
-    @JoinColumn(name = "lieu_id")
-    private Lieu lieu;
+    private long lieuId;
 
 
     public Long getId() {
@@ -44,8 +42,8 @@ public class Evenement {
         return nombreMaxPersonne;
     }
 
-    public Lieu getLieu() {
-        return lieu;
+    public Long getLieuId() {
+        return lieuId;
     }
 
     public Time getHeure() {
@@ -72,8 +70,8 @@ public class Evenement {
         this.nombreMaxPersonne = nombreMaxPersonne;
     }
 
-    public void setLieu(Lieu lieu) {
-        this.lieu = lieu;
+    public void setLieuId(Long lieuId) {
+        this.lieuId = lieuId;
     }
 
     public void setHeure(Time heure) {

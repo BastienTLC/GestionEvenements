@@ -22,5 +22,8 @@ export default {
     },
     getEvenementMembers(id) {
         return axios.get(`${API_URL}/${id}/participants`);
+    },
+    getEvenementLieu(id) {
+        return axios.get(`${API_URL}/${id}/lieu`);
     }
 }

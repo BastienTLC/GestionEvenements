@@ -1,12 +1,14 @@
 package com.example.gestionevenement.services.impl;
 
 import com.example.gestionevenement.dto.EvenementDto;
+import com.example.gestionevenement.dto.LieuDto;
 import com.example.gestionevenement.dto.MembreDto;
 import com.example.gestionevenement.entity.Evenement;
 import com.example.gestionevenement.repository.EvenementRepository;
 import com.example.gestionevenement.services.EvenementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +56,20 @@ public class EvenementServiceImpl implements EvenementService {
         evenementRepository.deleteById(id);
     }
 
+    @Override
+    public LieuDto getLieuByEvenementId(Long id) {
+        Evenement evenement = evenementRepository.findById(id).orElseThrow(() -> new RuntimeException("Evenement not found"));
+        Long LieuId = evenement.getLieuId();
+        String lieuUrl = "http://localhost:8083/lieux/" + LieuId;
+        RestTemplate restTemplate = new RestTemplate();
+        try {
+            return restTemplate.getForObject(lieuUrl, LieuDto.class);
+        }
+        catch (Exception e){
+            throw new RuntimeException("Lieu not found", e);
+        }
+    }
+
 
     /**
      * Map Evenement dto to Evenement entity
@@ -66,7 +82,7 @@ public class EvenementServiceImpl implements EvenementService {
         evenementDto.setDate(evenement.getDate());
         evenementDto.setHeure(evenement.getHeure());
         evenementDto.setDuree(evenement.getDuree());
-        //evenementDto.setIdLieu(evenement.getLieu().getId());
+        evenementDto.setIdLieu(evenement.getLieuId());
         evenementDto.setNombreMaxPersonne(evenement.getNombreMaxPersonne());
         return evenementDto;
     }
@@ -82,7 +98,7 @@ public class EvenementServiceImpl implements EvenementService {
         evenement.setDate(evenementDto.getDate());
         evenement.setHeure(evenementDto.getHeure());
         evenement.setDuree(evenementDto.getDuree());
-        //evenement.setLieu(evenementDto.getIdLieu());
+        evenement.setLieuId(evenementDto.getIdLieu());
         evenement.setNombreMaxPersonne(evenementDto.getNombreMaxPersonne());
         return evenement;
     }

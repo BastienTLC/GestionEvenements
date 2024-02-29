@@ -27,6 +27,14 @@ import Card from 'primevue/card';
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import Avatar from "primevue/avatar";
+import Fieldset from "primevue/fieldset";
+import ProgressSpinner from 'primevue/progressspinner';
+import Stepper from 'primevue/stepper';
+import StepperPanel from 'primevue/stepperpanel';
+import Calendar from "primevue/calendar";
+import InputNumber from 'primevue/inputnumber';
+import Dropdown from 'primevue/dropdown';
+
 
 
 
@@ -48,6 +56,13 @@ app.component('Card', Card)
 app.component('DataTable', DataTable)
 app.component('Column', Column)
 app.component('Avatar', Avatar)
+app.component('Fieldset', Fieldset)
+app.component('ProgressSpinner', ProgressSpinner)
+app.component('Stepper', Stepper)
+app.component('StepperPanel', StepperPanel)
+app.component('Calendar', Calendar)
+app.component('InputNumber', InputNumber)
+app.component('Dropdown', Dropdown)
 
 
 const routes = [

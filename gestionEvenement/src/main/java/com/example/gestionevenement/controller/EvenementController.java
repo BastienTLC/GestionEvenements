@@ -1,6 +1,7 @@
 package com.example.gestionevenement.controller;
 
 import com.example.gestionevenement.dto.EvenementDto;
+import com.example.gestionevenement.dto.LieuDto;
 import com.example.gestionevenement.dto.MembreDto;
 import com.example.gestionevenement.entity.Evenement;
 import com.example.gestionevenement.entity.Inscription;
@@ -75,9 +76,18 @@ public class EvenementController {
         }
     }
 
+    // Endpoint pour récupérer les participants d'un événement
     @GetMapping("/{id}/participants")
     public ResponseEntity<List<MembreDto>> getParticipantsOfEvenement(@PathVariable("id") Long id) {
         List<MembreDto> participants = inscriptionService.getParticipantsOfEvenement(id);
         return new ResponseEntity<>(participants, HttpStatus.OK);
+    }
+
+    //Endpoint pour récupérer le lieu d'un événement
+
+    @GetMapping("/{id}/lieu")
+    public ResponseEntity<LieuDto> getLieuByEvenementId(@PathVariable("id") Long id) {
+        LieuDto lieu = evenementService.getLieuByEvenementId(id);
+        return new ResponseEntity<>(lieu, HttpStatus.OK);
     }
 }

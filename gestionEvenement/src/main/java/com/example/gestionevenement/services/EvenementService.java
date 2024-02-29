@@ -1,6 +1,7 @@
 package com.example.gestionevenement.services;
 
 import com.example.gestionevenement.dto.EvenementDto;
+import com.example.gestionevenement.dto.LieuDto;
 import com.example.gestionevenement.dto.MembreDto;
 import com.example.gestionevenement.entity.Evenement;
 
@@ -15,5 +16,7 @@ public interface EvenementService {
     EvenementDto saveOrUpdateEvenement(Evenement evenement);
 
     void deleteEvenementById(Long id);
+
+    LieuDto getLieuByEvenementId(Long id);
 
 }

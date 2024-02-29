@@ -12,7 +12,7 @@ public class EvenementDto {
     private Time heure ;
     private Time duree;
     private Integer nombreMaxPersonne;
-    private int idLieu;
+    private Long idLieu;
 
     public Long getId() {
         return id;
@@ -38,7 +38,7 @@ public class EvenementDto {
         return heure;
     }
 
-    public int getIdLieu() {
+    public long getIdLieu() {
         return idLieu;
     }
 
@@ -58,7 +58,7 @@ public class EvenementDto {
         this.nombreMaxPersonne = nombreMaxPersonne;
     }
 
-    public void setIdLieu(int  idLieu) {
+    public void setIdLieu(Long  idLieu) {
         this.idLieu = idLieu;
     }
 
