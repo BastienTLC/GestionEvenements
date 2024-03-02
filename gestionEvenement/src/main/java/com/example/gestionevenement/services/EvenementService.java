@@ -13,7 +13,7 @@ public interface EvenementService {
 
     EvenementDto getEvenementById(Long id);
 
-    EvenementDto saveOrUpdateEvenement(Evenement evenement);
+    EvenementDto saveOrUpdateEvenement(EvenementDto evenement);
 
     void deleteEvenementById(Long id);
 

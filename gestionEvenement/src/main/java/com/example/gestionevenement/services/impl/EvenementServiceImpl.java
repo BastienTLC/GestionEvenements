@@ -46,9 +46,9 @@ public class EvenementServiceImpl implements EvenementService {
     }
 
     // Méthode pour créer ou mettre à jour un événement
-    public EvenementDto saveOrUpdateEvenement(Evenement evenement) {
-
-        return evenementEntityToDto(evenementRepository.save(evenement));
+    public EvenementDto saveOrUpdateEvenement(EvenementDto evenement) {
+        Evenement evenementEntity = evenementDtoToEntity(evenement);
+        return evenementEntityToDto(evenementRepository.save(evenementEntity));
     }
 
     // Méthode pour supprimer un événement par son identifiant
@@ -80,7 +80,6 @@ public class EvenementServiceImpl implements EvenementService {
         evenementDto.setId(evenement.getId());
         evenementDto.setNom(evenement.getNom());
         evenementDto.setDate(evenement.getDate());
-        evenementDto.setHeure(evenement.getHeure());
         evenementDto.setDuree(evenement.getDuree());
         evenementDto.setIdLieu(evenement.getLieuId());
         evenementDto.setNombreMaxPersonne(evenement.getNombreMaxPersonne());
@@ -96,7 +95,6 @@ public class EvenementServiceImpl implements EvenementService {
         evenement.setId(evenementDto.getId());
         evenement.setNom(evenementDto.getNom());
         evenement.setDate(evenementDto.getDate());
-        evenement.setHeure(evenementDto.getHeure());
         evenement.setDuree(evenementDto.getDuree());
         evenement.setLieuId(evenementDto.getIdLieu());
         evenement.setNombreMaxPersonne(evenementDto.getNombreMaxPersonne());

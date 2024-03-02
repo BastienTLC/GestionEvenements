@@ -25,5 +25,8 @@ export default {
     },
     getEvenementLieu(id) {
         return axios.get(`${API_URL}/${id}/lieu`);
+    },
+    checkEvenement(eventData) {
+        return axios.post(`${API_URL}/check`, eventData);
     }
 }

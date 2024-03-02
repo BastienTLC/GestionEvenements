@@ -1,5 +1,7 @@
 <script setup>
-import { ref } from 'vue';
+import {ref, watchEffect} from 'vue';
+import EvenementService from "@/services/EvenementService.js";
+import LieuService from "@/services/LieuService.js";
   defineProps({
     visible:{
       type: Boolean,
@@ -8,9 +10,56 @@ import { ref } from 'vue';
   });
 const active = ref(1);
 const completed = ref(false);
-const products = ref();
-const name = ref();
-const email = ref();
+const lieux = ref({});
+const lieu = ref();
+const evenementErrorCode = ref("");
+const postInput = ref({
+  nom: "",
+  date: "",
+  duree: "",
+  nombreMaxPersonne: 0,
+  idLieu: 0
+});
+
+const loadLieux = async () => {
+  try {
+    const response = await LieuService.getAllLieux();
+    console.log(response.data); // Affiche les données récupérées depuis l'API
+    lieux.value = response.data;
+  } catch (error) {
+    console.error('Error loading evenements:', error);
+  }
+};
+
+const checkEvenement = async () => {
+  try {
+    const response = await EvenementService.checkEvenement(postInput.value);
+    evenementErrorCode.value = response.data;
+  } catch (error) {
+    console.error('Error loading evenements:', error);
+  }
+};
+
+watchEffect(() => {
+  loadLieux();
+});
+
+const checkPostInput = () => {
+
+  if (postInput.value.nom === "" || postInput.value.date === "" || postInput.value.duree === "" || postInput.value.nombreMaxPersonne === 0 || lieu.value === null) {
+    console.log("Veuillez remplir tous les champs");
+    return false;
+  } else {
+    postInput.value.idLieu = lieu.value.id;
+    checkEvenement();
+    if (evenementErrorCode.value !== "") {
+      console.log("Evenement existant");
+      return false;
+    }
+    return true;
+  }
+};
+
 
 </script>
 
@@ -33,7 +82,8 @@ const email = ref();
                 <InputIcon>
                   <i class="pi pi-info" />
                 </InputIcon>
-                <InputText id="input" v-model="name" type="text" placeholder="Nom évènement" />
+                <span>Nom de l'évènement</span>
+                <InputText id="input" v-model="postInput.nom" type="text" />
               </IconField>
             </div>
             <div class="field p-fluid">
@@ -41,20 +91,23 @@ const email = ref();
                 <InputIcon>
                   <i class="pi pi-calendar" />
                 </InputIcon>
-                <Calendar id="calendar-24h" v-model="datetime24h" showTime hourFormat="24" placeholder="Date évènement" />
+                <span>Date de l'évènement</span>
+                <Calendar id="calendar-24h" v-model="postInput.date" showTime hourFormat="24" />
               </IconField>
             </div>
             <div class="field p-fluid">
               <InputIcon>
                 <i class="pi pi-hourglass" />
               </InputIcon>
-              <Calendar id="calendar-timeonly" v-model="time" timeOnly placeholder="Durée évènement" />
+              <span>Durée de l'évènement</span>
+              <Calendar id="calendar-timeonly" v-model="postInput.duree" timeOnly />
             </div>
             <div class="field p-fluid">
               <InputIcon>
                 <i class="pi pi-users" />
               </InputIcon>
-              <InputNumber v-model="value1" inputId="integeronly" placeholder="Nombre de personnes max" />
+              <span>Nombre de personnes max</span>
+              <InputNumber v-model="postInput.nombreMaxPersonne" inputId="integeronly" placeholder="Nombre de personnes max" />
             </div>
           </div>
 
@@ -79,13 +132,14 @@ const email = ref();
                 <InputIcon>
                   <i class="pi pi-home" />
                 </InputIcon>
-                <Dropdown v-model="selectedCity" :options="cities" optionLabel="name" placeholder="Select a City" class="w-full md:w-14rem" />
+                <span>Lieu de l'évènement</span>
+                <Dropdown v-model="lieu" :options="lieux" optionLabel="nom" placeholder="Select a City" class="w-full md:w-14rem" />
               </div>
             </div>
           </div>
           <div class="flex pt-4 justify-content-between">
             <Button label="Back" severity="secondary" icon="pi pi-arrow-left" @click="prevCallback" />
-            <Button label="Next" icon="pi pi-arrow-right" iconPos="right" @click="nextCallback" />
+            <Button label="Next" icon="pi pi-arrow-right" iconPos="right" @click="() => { if (checkPostInput()) { nextCallback(); } else { prevCallback(); } }" />
           </div>
         </template>
       </StepperPanel>

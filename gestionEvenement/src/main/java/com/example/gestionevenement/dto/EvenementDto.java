@@ -9,7 +9,6 @@ public class EvenementDto {
 
     private Date date;
 
-    private Time heure ;
     private Time duree;
     private Integer nombreMaxPersonne;
     private Long idLieu;
@@ -34,9 +33,6 @@ public class EvenementDto {
         return date;
     }
 
-    public Time getHeure() {
-        return heure;
-    }
 
     public long getIdLieu() {
         return idLieu;
@@ -66,7 +62,4 @@ public class EvenementDto {
         this.date = date;
     }
 
-    public void setHeure(Time heure) {
-        this.heure = heure;
-    }
 }

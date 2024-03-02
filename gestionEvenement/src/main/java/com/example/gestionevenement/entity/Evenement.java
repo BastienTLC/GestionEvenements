@@ -15,7 +15,6 @@ public class Evenement {
 
     private String nom;
     private Date date;
-    private Time heure;
     private Time duree;
     private Integer nombreMaxPersonne;
 
@@ -46,9 +45,6 @@ public class Evenement {
         return lieuId;
     }
 
-    public Time getHeure() {
-        return heure;
-    }
 
     public void setId(Long id) {
         this.id = id;
@@ -74,9 +70,6 @@ public class Evenement {
         this.lieuId = lieuId;
     }
 
-    public void setHeure(Time heure) {
-        this.heure = heure;
-    }
 
 
 }
