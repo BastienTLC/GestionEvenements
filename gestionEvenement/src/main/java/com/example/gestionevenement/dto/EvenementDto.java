@@ -1,65 +1,79 @@
 package com.example.gestionevenement.dto;
 
 import java.sql.Time;
+import java.time.Duration;
+import java.time.LocalTime;
 import java.util.Date;
 
 public class EvenementDto {
     private Long id;
     private String nom;
+    private Date dateEvenement;
+    private LocalTime heure;
+    private Long duree;
+    private Long lieuId;
+    private Integer nombreMaxPersonnes;
 
-    private Date date;
+    // Constructeurs, getters et setters
 
-    private Time duree;
-    private Integer nombreMaxPersonne;
-    private Long idLieu;
+    // Constructor
+    public EvenementDto() {}
 
+    // Getters and Setters
     public Long getId() {
         return id;
-    }
-
-    public String getNom() {
-        return nom;
-    }
-
-    public Time getDuree() {
-        return duree;
-    }
-
-    public Integer getNombreMaxPersonne() {
-        return nombreMaxPersonne;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-
-    public long getIdLieu() {
-        return idLieu;
     }
 
     public void setId(Long id) {
         this.id = id;
     }
 
+    public String getNom() {
+        return nom;
+    }
+
     public void setNom(String nom) {
         this.nom = nom;
     }
 
-    public void setDuree(Time duree) {
+    public Date getDateEvenement() {
+        return dateEvenement;
+    }
+
+    public void setDateEvenement(Date dateEvenement) {
+        this.dateEvenement = dateEvenement;
+    }
+
+    public LocalTime getHeure() {
+        return heure;
+    }
+
+    public void setHeure(LocalTime heure) {
+        this.heure = heure;
+    }
+
+    public Long getDuree() {
+        return duree;
+    }
+
+    public void setDuree(Long duree) {
         this.duree = duree;
     }
 
-    public void setNombreMaxPersonne(Integer nombreMaxPersonne) {
-        this.nombreMaxPersonne = nombreMaxPersonne;
+    public Long getLieuId() {
+        return lieuId;
     }
 
-    public void setIdLieu(Long  idLieu) {
-        this.idLieu = idLieu;
+    public void setLieuId(Long lieuId) {
+        this.lieuId = lieuId;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public Integer getNombreMaxPersonnes() {
+        return nombreMaxPersonnes;
+    }
+
+    public void setNombreMaxPersonnes(Integer nombreMaxPersonnes) {
+        this.nombreMaxPersonnes = nombreMaxPersonnes;
     }
 
 }

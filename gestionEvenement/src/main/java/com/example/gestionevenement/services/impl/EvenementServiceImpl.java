@@ -48,6 +48,7 @@ public class EvenementServiceImpl implements EvenementService {
     // Méthode pour créer ou mettre à jour un événement
     public EvenementDto saveOrUpdateEvenement(EvenementDto evenement) {
         Evenement evenementEntity = evenementDtoToEntity(evenement);
+
         return evenementEntityToDto(evenementRepository.save(evenementEntity));
     }
 
@@ -72,32 +73,32 @@ public class EvenementServiceImpl implements EvenementService {
 
 
     /**
-     * Map Evenement dto to Evenement entity
+     * Map Evenement entity to EvenementDto
      */
-
     private EvenementDto evenementEntityToDto(Evenement evenement) {
         EvenementDto evenementDto = new EvenementDto();
         evenementDto.setId(evenement.getId());
         evenementDto.setNom(evenement.getNom());
-        evenementDto.setDate(evenement.getDate());
+        evenementDto.setDateEvenement(evenement.getDateEvenement());
+        evenementDto.setHeure(evenement.getHeure());
         evenementDto.setDuree(evenement.getDuree());
-        evenementDto.setIdLieu(evenement.getLieuId());
-        evenementDto.setNombreMaxPersonne(evenement.getNombreMaxPersonne());
+        evenementDto.setLieuId(evenement.getLieuId());
+        evenementDto.setNombreMaxPersonnes(evenement.getNombreMaxPersonnes());
         return evenementDto;
     }
 
     /**
-     * Map Evenement entity to Evenement dto
+     * Map EvenementDto to Evenement entity
      */
-
     private Evenement evenementDtoToEntity(EvenementDto evenementDto) {
         Evenement evenement = new Evenement();
         evenement.setId(evenementDto.getId());
         evenement.setNom(evenementDto.getNom());
-        evenement.setDate(evenementDto.getDate());
+        evenement.setDateEvenement(evenementDto.getDateEvenement());
+        evenement.setHeure(evenementDto.getHeure());
         evenement.setDuree(evenementDto.getDuree());
-        evenement.setLieuId(evenementDto.getIdLieu());
-        evenement.setNombreMaxPersonne(evenementDto.getNombreMaxPersonne());
+        evenement.setLieuId(evenementDto.getLieuId());
+        evenement.setNombreMaxPersonnes(evenementDto.getNombreMaxPersonnes());
         return evenement;
     }
 }

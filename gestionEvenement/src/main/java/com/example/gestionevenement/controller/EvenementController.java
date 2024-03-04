@@ -49,10 +49,6 @@ public class EvenementController {
     // Endpoint pour créer un nouvel événement
     @PostMapping
     public ResponseEntity<Object> createEvenement(@RequestBody EvenementDto evenement) {
-        //Vérifier si l'événement est complet
-        if (isEvenementComplet(evenement.getId())) {
-            return new ResponseEntity<>("L'événement est complet", HttpStatus.INSUFFICIENT_STORAGE);
-        }
         //Vérifier si l'événement chevauche un autre événement
         if (isEvenementChevauche(evenement)) {
             return new ResponseEntity<>("L'événement chevauche un autre événement", HttpStatus.BAD_REQUEST);
@@ -117,26 +113,11 @@ public class EvenementController {
         return new ResponseEntity<>(participants.size(), HttpStatus.OK);
     }
 
-    //Endpoint pour vérifier si un évènement peut être créé sinon retourner un message d'erreur
-    @PostMapping("/check")
-    public ResponseEntity<Object> checkEvenement(@RequestBody EvenementDto evenement) {
-        //Vérifier si l'événement est complet
-        if (isEvenementComplet(evenement.getId())) {
-            return new ResponseEntity<>("L'événement est complet", HttpStatus.INSUFFICIENT_STORAGE);
-        }
-        //Vérifier si l'événement chevauche un autre événement
-        if (isEvenementChevauche(evenement)) {
-            return new ResponseEntity<>("L'événement chevauche un autre événement", HttpStatus.BAD_REQUEST);
-        }
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-
     //fonction qui retourne true si un évènement est complet
     public boolean isEvenementComplet(Long id) {
         EvenementDto evenement = evenementService.getEvenementById(id);
         LieuDto lieu = evenementService.getLieuByEvenementId(id);
-        return Objects.equals(evenement.getNombreMaxPersonne(), lieu.getCapacite_accueil());
+        return Objects.equals(evenement.getNombreMaxPersonnes(), lieu.getCapacite_accueil());
     }
 
     //fonction qui retourne true si un membre est inscrit à un évènement
@@ -153,26 +134,32 @@ public class EvenementController {
 
     //fonction qui retourne true si un evenement en cours de création chevauche un autre evenement
     public boolean isEvenementChevauche(EvenementDto evenement) {
-
         List<EvenementDto> evenements = evenementService.getAllEvenements();
 
-
         for (EvenementDto e : evenements) {
-            Date dateDebutEvenement1 = e.getDate();
-            Date dateFinEvenement1 = new Date(dateDebutEvenement1.getTime() + e.getDuree().getTime());
+            // Vérifier si les événements ont lieu au même endroit
+            if (Objects.equals(e.getLieuId(), evenement.getLieuId())) {
+                // Convertir la durée de l'événement en millisecondes
+                long dureeEvenement = evenement.getDuree();
 
-            Date dateDebutEvenement2 = evenement.getDate();
-            Date dateFinEvenement2 = new Date(dateDebutEvenement2.getTime() + evenement.getDuree().getTime());
+                // Calculer les dates de début et de fin pour chaque événement
+                Date dateDebutEvenement1 = e.getDateEvenement();
+                Date dateFinEvenement1 = new Date(dateDebutEvenement1.getTime() + e.getDuree());
 
-            if(e.getIdLieu() == evenement.getIdLieu()) {
-                if ((dateDebutEvenement1.compareTo(dateDebutEvenement2) <= 0 && dateDebutEvenement1.compareTo(dateFinEvenement2) >= 0) ||
-                        (dateFinEvenement1.compareTo(dateDebutEvenement2) >= 0 && dateFinEvenement1.compareTo(dateFinEvenement2) <= 0) ||
-                        (dateDebutEvenement1.compareTo(dateDebutEvenement2) <= 0 && dateFinEvenement1.compareTo(dateFinEvenement2) >= 0)) {
-                    return true;
+                Date dateDebutEvenement2 = evenement.getDateEvenement();
+                Date dateFinEvenement2 = new Date(dateDebutEvenement2.getTime() + evenement.getDuree());
+
+
+
+                // Vérifier s'il y a un chevauchement entre les deux événements
+                if ((dateDebutEvenement1.compareTo(dateFinEvenement2) <= 0 && dateFinEvenement1.compareTo(dateDebutEvenement2) >= 0) ||
+                        (dateDebutEvenement2.compareTo(dateFinEvenement1) <= 0 && dateFinEvenement2.compareTo(dateDebutEvenement1) >= 0)) {
+                    return true; // Il y a un chevauchement
                 }
             }
         }
-        return false;
+        return false; // Pas de chevauchement trouvé
     }
+
 
 }
