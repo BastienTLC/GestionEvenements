@@ -13,10 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
@@ -140,16 +137,32 @@ public class EvenementController {
             // Vérifier si les événements ont lieu au même endroit
             if (Objects.equals(e.getLieuId(), evenement.getLieuId())) {
                 // Convertir la durée de l'événement en millisecondes
-                long dureeEvenement = evenement.getDuree();
+                Long dureeEvenement = evenement.getDuree();
 
-                // Calculer les dates de début et de fin pour chaque événement
-                Date dateDebutEvenement1 = e.getDateEvenement();
-                Date dateFinEvenement1 = new Date(dateDebutEvenement1.getTime() + e.getDuree());
+                // Combiner la date et l'heure pour chaque événement
+                Calendar DateDebutEvenementCourant = Calendar.getInstance();
+                DateDebutEvenementCourant.setTime(e.getDateEvenement());
+                DateDebutEvenementCourant.set(Calendar.HOUR_OF_DAY, e.getHeure().getHour());
+                DateDebutEvenementCourant.set(Calendar.MINUTE, e.getHeure().getMinute());
+                DateDebutEvenementCourant.set(Calendar.SECOND, e.getHeure().getSecond());
+                Date dateDebutEvenement1 = DateDebutEvenementCourant.getTime();
 
-                Date dateDebutEvenement2 = evenement.getDateEvenement();
-                Date dateFinEvenement2 = new Date(dateDebutEvenement2.getTime() + evenement.getDuree());
+                Calendar DateFinEvenementCourant = Calendar.getInstance();
+                DateFinEvenementCourant.setTime(dateDebutEvenement1);
+                DateFinEvenementCourant.add(Calendar.MILLISECOND, e.getDuree().intValue());
+                Date dateFinEvenement1 = DateFinEvenementCourant.getTime();
 
+                Calendar dateDebutEvenementCree = Calendar.getInstance();
+                dateDebutEvenementCree.setTime(evenement.getDateEvenement());
+                dateDebutEvenementCree.set(Calendar.HOUR_OF_DAY, evenement.getHeure().getHour());
+                dateDebutEvenementCree.set(Calendar.MINUTE, evenement.getHeure().getMinute());
+                dateDebutEvenementCree.set(Calendar.SECOND, evenement.getHeure().getSecond());
+                Date dateDebutEvenement2 = dateDebutEvenementCree.getTime();
 
+                Calendar dateFinEvenementCree = Calendar.getInstance();
+                dateFinEvenementCree.setTime(dateDebutEvenement2);
+                dateFinEvenementCree.add(Calendar.MILLISECOND, dureeEvenement.intValue());
+                Date dateFinEvenement2 = dateFinEvenementCree.getTime();
 
                 // Vérifier s'il y a un chevauchement entre les deux événements
                 if ((dateDebutEvenement1.compareTo(dateFinEvenement2) <= 0 && dateFinEvenement1.compareTo(dateDebutEvenement2) >= 0) ||

@@ -34,6 +34,8 @@ import StepperPanel from 'primevue/stepperpanel';
 import Calendar from "primevue/calendar";
 import InputNumber from 'primevue/inputnumber';
 import Dropdown from 'primevue/dropdown';
+import Toast from 'primevue/toast';
+import ToastService from 'primevue/toastservice';
 
 
 
@@ -63,6 +65,8 @@ app.component('StepperPanel', StepperPanel)
 app.component('Calendar', Calendar)
 app.component('InputNumber', InputNumber)
 app.component('Dropdown', Dropdown)
+app.component('Toast', Toast)
+app.use(ToastService);
 
 
 const routes = [
