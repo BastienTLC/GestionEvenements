@@ -3,15 +3,16 @@ package com.example.gestionevenement.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "inscription")
+@Table(name = "inscriptions")
 public class Inscription {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "evenement_id")
     private Long idEvenement;
-
+    @Column(name = "membre_id")
     private Long IdMembre;
 
     public Long getId() {
