@@ -35,6 +35,7 @@ import Calendar from "primevue/calendar";
 import InputNumber from 'primevue/inputnumber';
 import Dropdown from 'primevue/dropdown';
 import Toast from 'primevue/toast';
+import ContextMenu from 'primevue/contextmenu';
 import ToastService from 'primevue/toastservice';
 
 
@@ -66,6 +67,7 @@ app.component('Calendar', Calendar)
 app.component('InputNumber', InputNumber)
 app.component('Dropdown', Dropdown)
 app.component('Toast', Toast)
+app.component('ContextMenu', ContextMenu)
 app.use(ToastService);
 
 
