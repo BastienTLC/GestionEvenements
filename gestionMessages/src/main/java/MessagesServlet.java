@@ -31,6 +31,7 @@ import java.util.Date;
 
 
 
+
 public class MessagesServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
@@ -129,13 +130,13 @@ public class MessagesServlet extends HttpServlet {
 		String idMembre = request.getParameter("userId");
 		String idEvent = request.getParameter("eventId");
 		String contenu = request.getParameter("contenu");
+		PrintWriter out = response.getWriter();
+		String json = "[";
 			
 		if (idMembre!=null && contenu==null) {
 			List<Message> messagesClones = this.getMessagesMongoByMembreId(Integer.parseInt(idMembre));
 			
 			response.setContentType("application/json; charset=UTF-8");
-			PrintWriter out = response.getWriter();
-			String json = "[";
 			for (Message msg : messagesClones) {
 				json += "\"{\"contenu\" : \""+msg.getContenu() + "\", \"idMembre\" : \""+msg.getIdMembre()
 						+ "\", \"idEvent\" : \""+msg.getIdEvent()+"\", \"date\" : \""+msg.getDate()+"\"}";
@@ -147,8 +148,6 @@ public class MessagesServlet extends HttpServlet {
 			List<Message> messagesClones = this.getMessagesMongoByEventId(Integer.parseInt(idEvent));
 			
 			response.setContentType("application/json; charset=UTF-8");
-			PrintWriter out = response.getWriter();
-			String json = "[";
 			for (Message msg : messagesClones) {
 				json += "\"{\"contenu\" : \""+msg.getContenu() + "\", \"idMembre\" : \""+msg.getIdMembre()
 						+ "\", \"idEvent\" : \""+msg.getIdEvent()+"\", \"date\" : \""+msg.getDate()+"\"}";
@@ -157,12 +156,9 @@ public class MessagesServlet extends HttpServlet {
 			out.write(json);
 			out.close();
 		} else if (contenu==null) {
-			
 			List<Message> messagesClones = this.getListeMessagesMongoDB();
-			
 			response.setContentType("application/json; charset=UTF-8");
-			PrintWriter out = response.getWriter();
-			String json = "[";
+			
 			for (Message msg : messagesClones) {
 				json += "\"{\"contenu\" : \""+msg.getContenu() + "\", \"idMembre\" : \""+msg.getIdMembre()
 						+ "\", \"idEvent\" : \""+msg.getIdEvent()+"\", \"date\" : \""+msg.getDate()+"\"}";
@@ -175,11 +171,19 @@ public class MessagesServlet extends HttpServlet {
 		    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		    Date date = new Date();
 		    String datePublication = dateFormat.format(date);
+		    boolean res = false;
 
 		    if (contenu != null && idMembre != null && idEvent != null) {
-		        insererMessageDansMongoDB(contenu, Integer.parseInt(idMembre), Integer.parseInt(idEvent), datePublication);
-		        
+		        res = insererMessageDansMongoDB(contenu, Integer.parseInt(idMembre), Integer.parseInt(idEvent), datePublication);
 		    }
+		    if(res) {
+		    	json += "200]"; // SC_OK Status code (200) indicating the request succeeded normally.
+		    }else {
+		    	json += "400]"; // SC_BAD_REQUEST Status code (400) indicating the request sent by the client was syntactically incorrect.
+		    }
+		    
+			out.write(json);
+			out.close();
 		}
 		
 	}
