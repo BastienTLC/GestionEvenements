@@ -2,16 +2,18 @@ package com.example.gestionlieu.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "lieu")
+@Table(name = "lieux")
 public class Lieu {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    @Column(name = "id")
     private Long id;
-
+    @Column(name = "nom")
     private String nom;
-
+    @Column(name = "adresse")
     private String adresse;
-
+    @Column(name = "capacite_max")
     private Integer capacite_accueil;
 
     public Long getId() {

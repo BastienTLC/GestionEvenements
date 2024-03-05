@@ -3,17 +3,22 @@ package com.example.gestionmembre.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "membre")
+@Table(name = "membres")
 public class Membre {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @Column(name = "nom")
     private String nom;
+
+    @Column(name = "prenom")
     private String prenom;
+
+    @Column(name = "adresse")
     private String adresse;
+
+    @Column(name = "age")
     private Integer age;
-    private String mdp;
 
     public Long getId() {
         return id;
@@ -55,11 +60,4 @@ public class Membre {
         this.age = age;
     }
 
-    public String getMdp() {
-        return mdp;
-    }
-
-    public void setMdp(String mdp) {
-        this.mdp = mdp;
-    }
 }

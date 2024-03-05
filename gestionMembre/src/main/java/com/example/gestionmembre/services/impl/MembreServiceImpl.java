@@ -60,7 +60,6 @@ import java.util.List;
         membreDto.setPrenom(membre.getPrenom());
         membreDto.setAdresse(membre.getAdresse());
         membreDto.setAge(membre.getAge());
-        membreDto.setMdp(membre.getMdp());
         return membreDto;
     }
 
@@ -75,7 +74,6 @@ import java.util.List;
         membre.setPrenom(membreDto.getPrenom());
         membre.setAdresse(membreDto.getAdresse());
         membre.setAge(membreDto.getAge());
-        membre.setMdp(membreDto.getMdp());
         return membre;
     }
 }
