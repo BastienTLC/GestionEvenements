@@ -3,7 +3,7 @@ import {ref, watchEffect} from 'vue';
 import {useRoute} from 'vue-router';
 import EvenementService from '@/services/EvenementService.js';
 import CustomTabMenu from "@/components/CustomTabMenu.vue";
-import {formatDate} from "@/utils/formatDate.js";
+import {formatDate, formatDuree} from "@/utils/formatDate.js";
 
 const route = useRoute();
 const evenementId = ref(route.params.id);
@@ -68,7 +68,7 @@ watchEffect(() => {
           <img alt="user header" src="https://pbs.twimg.com/profile_images/1587790498684698625/MeI2W4h5_400x400.jpg" />
         </template>
         <template #title>{{evenement.nom}}</template>
-        <template #subtitle>{{ `${evenement.nombreMaxPersonne}/${lieu.capacite_accueil}` }}</template>
+        <template #subtitle>{{ `${evenement.nombreMaxPersonnes}/${lieu.capacite_accueil}` }}</template>
         <template #footer>
         </template>
       </Card>
@@ -77,7 +77,7 @@ watchEffect(() => {
           <div class="flex flex-column gap-4">
             <div class="flex flex-column gap-2">
               <span class="font-medium text-secondary text-sm">Date</span>
-              <span class="text-lg font-medium text-900">{{ formatDate(evenement.date) }}</span>
+              <span class="text-lg font-medium text-900">{{ `${formatDate(evenement.dateEvenement)} ${evenement.heure}` }}</span>
             </div>
             <Divider />
             <div class="flex flex-column gap-2">
@@ -87,7 +87,7 @@ watchEffect(() => {
             <Divider />
             <div class="flex flex-column gap-2">
               <span class="font-medium text-secondary text-sm">Durée</span>
-              <span class="text-lg font-medium text-900">{{ evenement.duree }}</span>
+              <span class="text-lg font-medium text-900">{{ formatDuree(evenement.duree) }}</span>
             </div>
             <Divider />
             <div class="flex flex-column gap-2">

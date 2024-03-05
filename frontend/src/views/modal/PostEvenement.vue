@@ -98,8 +98,6 @@
   };
 
 
-
-
   </script>
 
   <template>
@@ -185,7 +183,7 @@
         </StepperPanel>
         <StepperPanel>
           <template #header="{ index, clickCallback }">
-            <button class="bg-transparent border-none inline-flex flex-column gap-2" @click="() => { if (createEvenement()) { clickCallback } else { prevCallback(); } }">
+            <button class="bg-transparent border-none inline-flex flex-column gap-2" @click="() => { if (createEvenement()) { clickCallback() } else { clickCallback() } }">
                   <span :class="['border-round border-2 w-3rem h-3rem inline-flex align-items-center justify-content-center', { 'bg-primary border-primary': index <= active, 'surface-border': index > active }]">
                       <i class="pi pi-id-card" />
                   </span>
@@ -202,7 +200,7 @@
             </div>
             <div class="flex pt-4 justify-content-between">
               <Button label="Back" severity="secondary" icon="pi pi-arrow-left" @click="prevCallback" />
-              <Button label="Terminer" iconPos="right" @click="$emit('update:visible', false)" :disabled="errorMessages.length !== 0" />
+              <Button label="Terminer" iconPos="right" @click="$emit('update:visible', false); $emit('modalClose')" :disabled="errorMessages.length !== 0" />
             </div>
           </template>
         </StepperPanel>

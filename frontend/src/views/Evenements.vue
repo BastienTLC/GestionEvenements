@@ -1,6 +1,6 @@
 <template>
   <CustomTabMenu :selectedIndex="activeIndex" />
-  <div class="fixed-button-container">
+  <div class="fixed-button-container z-5">
     <Button icon="pi pi-plus" rounded aria-label="Filter" size="large" class="p-button-lg" @click="visible = true" />
   </div>
   <div v-if="isLoading">
@@ -29,10 +29,10 @@
                   </div>
                 </div>
                 <div class="flex flex-column md:align-items-end gap-5">
-                  <span class="text-xl font-semibold text-900">{{ formatDate(item.date) }}</span>
+                  <span class="text-xl font-semibold text-900">{{ formatDate(item.dateEvenement) }}</span>
                   <div class="flex flex-row-reverse md:flex-row gap-2">
-                    <Button icon="pi pi-shopping-cart" label="Rejoindre" :disabled="item.inventoryStatus === 'OUTOFSTOCK'" class="flex-auto md:flex-initial white-space-nowrap"></Button>
-                    <Button icon="pi pi-shopping-cart" label="Information" :disabled="item.inventoryStatus === 'OUTOFSTOCK'" @click="openEventDetails(item.id)" class="flex-auto md:flex-initial white-space-nowrap"></Button>
+                    <Button icon="pi pi-shopping-cart" label="Rejoindre" :disabled="item.inventoryStatus === 'FULL'" class="flex-auto md:flex-initial white-space-nowrap"></Button>
+                    <Button icon="pi pi-shopping-cart" label="Information" @click="openEventDetails(item.id)" class="flex-auto md:flex-initial white-space-nowrap"></Button>
                   </div>
                 </div>
               </div>
@@ -43,13 +43,13 @@
     </DataView>
   </div>
   <div class="modal-container">
-    <PostEvenement v-if="visible" v-model:visible="visible" />
+    <PostEvenement v-if="visible" v-model:visible="visible" @modalClose="handleModalClose" />
   </div>
 </template>
 
 <script setup>
 import CustomTabMenu from "@/components/CustomTabMenu.vue";
-import { ref } from "vue";
+import {ref, watchEffect} from "vue";
 import { useRouter } from "vue-router";
 import EvenementService from "@/services/EvenementService.js";
 import { formatDate} from "@/utils/formatDate.js";
@@ -72,11 +72,18 @@ const loadEvenements = async () => {
   }
 };
 
-loadEvenements();
+watchEffect(() => {
+  loadEvenements();
+});
 
 const openEventDetails = (eventId) => {
   router.push(`/evenements/${eventId}`);
 };
+
+const handleModalClose = () => {
+  loadEvenements();
+};
+
 </script>
 <style scoped>
 .fixed-button-container {
