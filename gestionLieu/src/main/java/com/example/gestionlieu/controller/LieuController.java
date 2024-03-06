@@ -31,6 +31,15 @@ public class LieuController {
         return lieu.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+    @PostMapping
+    public ResponseEntity<LieuDto> createLieu(@RequestBody Lieu lieu){
+        if(isLieuExist(lieu)){
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+        LieuDto newLieu = lieuService.saveOrUpdateLieu(lieu);
+        return new ResponseEntity<>(newLieu, HttpStatus.CREATED);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<LieuDto> updateLieu(@PathVariable("id") Long id, @RequestBody Lieu lieu){
         LieuDto existingLieu = lieuService.getLieuById(id);
@@ -47,6 +56,11 @@ public class LieuController {
     public ResponseEntity<Void> deleteLieu(@PathVariable("id") Long id){
         lieuService.deleteLieuById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    //fonction pour tester si un nouveau existe déjà même adresse
+    private boolean isLieuExist(Lieu lieu){
+        return lieuService.getAllLieux().stream().anyMatch(l -> l.getAdresse().equals(lieu.getAdresse()));
     }
 
 }

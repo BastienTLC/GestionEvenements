@@ -39,9 +39,9 @@
     }
   };
 
-  const editEvenement = async () => {
+  const editEvenement = async (input) => {
     try {
-      const response = await EvenementService.updateEvenement(props.evenementToEdit.id, postInput.value);
+      const response = await EvenementService.updateEvenement(props.evenementToEdit.id, input);
       console.log(response.data); // Affiche les données récupérées depuis l'API
       showSuccess();
     } catch (error) {
@@ -62,7 +62,7 @@
     } else {
       errorMessages.value = [];
       const input = convertInput();
-      await editEvenement();
+      await editEvenement(input);
       return true;
     }
   };
@@ -82,6 +82,7 @@
     const minutes = dureeI.getMinutes();
     const secondes = dureeI.getSeconds();
     const dureeMs = (heures * 60 * 60 + minutes * 60 + secondes) * 1000;
+    console.log(dureeMs)
 
     return {
       nom: postInput.value.nom,

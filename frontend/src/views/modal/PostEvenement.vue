@@ -71,18 +71,22 @@
 
   const convertInput = () => {
     const dateObj = new Date(postInput.value.dateEvenement);
-    const dateEvenement = dateObj.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', hour12: false });
+    const hoursEvenement = dateObj.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', hour12: false });
+
+    const dateOnly = new Date(postInput.value.dateEvenement);
+    dateOnly.setHours(0, 0, 0, 0);
 
     const dureeI = postInput.value.duree;
     const heures = dureeI.getHours();
     const minutes = dureeI.getMinutes();
     const secondes = dureeI.getSeconds();
     const dureeMs = (heures * 60 * 60 + minutes * 60 + secondes) * 1000;
+    console.log(dateOnly)
 
     return {
       nom: postInput.value.nom,
-      dateEvenement: postInput.value.dateEvenement,
-      heure: dateEvenement,
+      dateEvenement: dateOnly,
+      heure: hoursEvenement,
       duree: dureeMs,
       nombreMaxPersonnes: postInput.value.nombreMaxPersonnes,
       lieuId: lieu.value.id

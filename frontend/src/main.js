@@ -9,7 +9,7 @@ import 'primeicons/primeicons.css'
 import 'primeflex/primeflex.css'
 
 import Home from './views/Home.vue'
-import About from './views/About.vue'
+import About from './views/Lieux.vue'
 import Evenements from './views/Evenements.vue'
 import EvenementDetails from "@/views/EvenementDetails.vue";
 
@@ -37,6 +37,7 @@ import Dropdown from 'primevue/dropdown';
 import Toast from 'primevue/toast';
 import ContextMenu from 'primevue/contextmenu';
 import ToastService from 'primevue/toastservice';
+import Lieux from "@/views/Lieux.vue";
 
 
 
@@ -73,7 +74,7 @@ app.use(ToastService);
 
 const routes = [
   {path : "/" , component: Home},
-  {path : "/about" , component: About},
+  {path : "/lieux" , component: Lieux},
   {path : "/evenements" , component: Evenements},
   { path: "/evenements/:id", component: EvenementDetails },
 ]
