@@ -1,11 +1,12 @@
   <script setup>
-  import {ref, watchEffect} from 'vue';
+  import {ref, defineProps} from 'vue';
   import EvenementService from "@/services/EvenementService.js";
   import { useToast } from "primevue/usetoast";
   const toast = useToast();
   import LieuService from "@/services/LieuService.js";
-    defineProps({
-      visible:{
+  import {combineDateAndTime, formatDuree} from "@/utils/formatDate.js";
+    const props = defineProps({
+      visible: {
         type: Boolean,
         required: true
       },
@@ -20,26 +21,27 @@
   const lieu = ref();
   const succesMessage = "Evenement créé avec succès";
   const postInput = ref({
-    nom: "",
-    dateEvenement: "",
-    heure: "",
-    duree: "",
-    nombreMaxPersonnes: 0,
-    lieuId: 0
+    nom: props.evenementToEdit.nom,
+    dateEvenement: combineDateAndTime(props.evenementToEdit.dateEvenement, props.evenementToEdit.heure),
+    heure: props.evenementToEdit.heure,
+    duree: new Date(props.evenementToEdit.duree),
+    nombreMaxPersonnes: props.evenementToEdit.nombreMaxPersonnes,
+    lieuId: props.evenementToEdit.lieuId
   });
 
   const loadLieux = async () => {
     try {
       const response = await LieuService.getAllLieux();
       lieux.value = response.data;
+      lieu.value = lieux.value.find((lieu) => lieu.id === props.evenementToEdit.lieuId);
     } catch (error) {
       console.error('Error loading evenements:', error);
     }
   };
 
-  const postEvenement = async (input) => {
+  const editEvenement = async () => {
     try {
-      const response = await EvenementService.createEvenement(input);
+      const response = await EvenementService.updateEvenement(props.evenementToEdit.id, postInput.value);
       console.log(response.data); // Affiche les données récupérées depuis l'API
       showSuccess();
     } catch (error) {
@@ -48,7 +50,9 @@
       showError(errorMessages.value[0]);
     }
   };
+
   loadLieux();
+
 
   const createEvenement = async () => {
     if (!validateForm()) {
@@ -58,7 +62,7 @@
     } else {
       errorMessages.value = [];
       const input = convertInput();
-      await postEvenement(input);
+      await editEvenement();
       return true;
     }
   };
@@ -97,6 +101,7 @@
     toast.add({ severity: 'error', summary: 'Error Message', detail: errorMessages.value[0], life: 3000 });
   };
 
+  console.log(postInput.value);
 
   </script>
 
@@ -121,7 +126,7 @@
                     <i class="pi pi-info" />
                   </InputIcon>
                   <span>Nom de l'évènement</span>
-                  <InputText id="input" v-model="evenementToEdit.nom" type="text" />
+                  <InputText id="input" v-model="postInput.nom" type="text" />
                 </IconField>
               </div>
               <div class="field p-fluid">
@@ -130,7 +135,7 @@
                     <i class="pi pi-calendar" />
                   </InputIcon>
                   <span>Date de l'évènement</span>
-                  <Calendar id="calendar-24h" v-model="evenementToEdit.dateEvenement" showTime hourFormat="24" />
+                  <Calendar id="calendar-24h" v-model="postInput.dateEvenement" showTime hourFormat="24" />
                 </IconField>
               </div>
               <div class="field p-fluid">
@@ -145,7 +150,7 @@
                   <i class="pi pi-users" />
                 </InputIcon>
                 <span>Nombre de personnes max</span>
-                <InputNumber v-model="evenementToEdit.nombreMaxPersonnes" inputId="integeronly" placeholder="Nombre de personnes max" />
+                <InputNumber v-model="postInput.nombreMaxPersonnes" inputId="integeronly" placeholder="Nombre de personnes max" />
               </div>
             </div>
 

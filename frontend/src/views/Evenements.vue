@@ -91,7 +91,7 @@ const loadEvenements = async () => {
 
 const deleteEvenement = async () => {
   try {
-    const response = await EvenementService.deleteEvenement(selectedId.value);
+    const response = await EvenementService.deleteEvenement(selectedEvenement.value.id);
     loadEvenements();
   } catch (error) {
     console.error('Error deleting evenement:', error);

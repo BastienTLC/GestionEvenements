@@ -22,7 +22,14 @@ export function formatDuree(duree) {
 
     const heuresString = heures < 10 ? `0${heures}` : heures.toString();
     const minutesString = minutes < 10 ? `0${minutes}` : minutes.toString();
-    const secondesString = secondesRestantes < 10 ? `0${secondesRestantes}` : secondesRestantes.toString();
 
-    return `${heuresString}:${minutesString}:${secondesString}`;
+    return `${heuresString}:${minutesString}`;
+}
+
+//fonction qui prend un date sous cette forme : 2024-03-09T23:00:00.000+00:00 et un heure sous cette forme : 23:00 et qui retourne 2024-03-11T23:23:00.000+00:00
+export function combineDateAndTime(date, time) {
+    const datePart = date.split('T')[0];
+    console.log(date, time)
+
+    return new Date(`${datePart}T${time}`);
 }
