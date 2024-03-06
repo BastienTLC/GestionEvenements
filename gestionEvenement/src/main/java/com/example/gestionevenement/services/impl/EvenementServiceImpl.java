@@ -38,6 +38,17 @@ public class EvenementServiceImpl implements EvenementService {
         return evenementDtos;
     }
 
+    @Override
+    public List<EvenementDto> getEvenementsByLieuId(Long id) {
+        List<EvenementDto> evenementDtos = new ArrayList<>();
+        List<Evenement> evenements = evenementRepository.findByLieuId(id);
+        evenements.forEach(evenement -> {
+            evenementDtos.add(evenementEntityToDto(evenement));
+        });
+        return evenementDtos;
+    }
+
+
     // Méthode pour récupérer un événement par son identifiant
     public EvenementDto getEvenementById(Long id) {
 
@@ -70,6 +81,7 @@ public class EvenementServiceImpl implements EvenementService {
             throw new RuntimeException("Lieu not found", e);
         }
     }
+
 
 
     /**

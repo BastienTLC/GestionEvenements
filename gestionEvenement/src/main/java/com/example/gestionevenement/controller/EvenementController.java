@@ -36,6 +36,13 @@ public class EvenementController {
         return new ResponseEntity<>(evenements, HttpStatus.OK);
     }
 
+    //Endpoint pour récupérer tous les événements d'un lieu
+    @GetMapping("/lieux/{id}")
+    public ResponseEntity<List<EvenementDto>> getEvenementsByLieuId(@PathVariable("id") Long id) {
+        List<EvenementDto> evenements = evenementService.getEvenementsByLieuId(id);
+        return new ResponseEntity<>(evenements, HttpStatus.OK);
+    }
+
     // Endpoint pour récupérer un événement par son identifiant
     @GetMapping("/{id}")
     public ResponseEntity<EvenementDto> getEvenementById(@PathVariable("id") Long id) {
@@ -109,6 +116,8 @@ public class EvenementController {
         List<MembreDto> participants = inscriptionService.getParticipantsOfEvenement(id);
         return new ResponseEntity<>(participants.size(), HttpStatus.OK);
     }
+
+
 
     //fonction qui retourne true si un évènement est complet
     public boolean isEvenementComplet(Long id) {

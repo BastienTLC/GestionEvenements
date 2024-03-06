@@ -6,6 +6,7 @@ import com.example.gestionlieu.repository.LieuRepository;
 import com.example.gestionlieu.services.LieuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +43,21 @@ public class LieuServiceImpl implements LieuService {
 
     @Override
     public void deleteLieuById(Long id) {
+        String evenementUrl = "http://localhost:8082/evenements/lieux/" + id;
+        RestTemplate restTemplate = new RestTemplate();
+        try {
+            LieuDto[] lieuxArray = restTemplate.getForObject(evenementUrl, LieuDto[].class);
+            if (lieuxArray != null) {
+                for (LieuDto lieu : lieuxArray) {
+                    restTemplate.delete("http://localhost:8082/evenements/" + lieu.getId());
+                }
+            } else {
+                System.out.println("No evenement found");
+            }
+        } catch (Exception e) {
+            System.out.println("Error occurred while fetching evenements");
+            e.printStackTrace();
+        }
         lieuRepository.deleteById(id);
     }
 

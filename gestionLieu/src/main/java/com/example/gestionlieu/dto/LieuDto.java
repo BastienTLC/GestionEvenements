@@ -1,8 +1,9 @@
 package com.example.gestionlieu.dto;
 
+
+
 public class LieuDto {
     private Long id;
-
     private String nom;
 
     private String adresse;

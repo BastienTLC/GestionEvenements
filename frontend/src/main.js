@@ -36,7 +36,11 @@ import InputNumber from 'primevue/inputnumber';
 import Dropdown from 'primevue/dropdown';
 import Toast from 'primevue/toast';
 import ContextMenu from 'primevue/contextmenu';
+import ConfirmPopup from 'primevue/confirmpopup';
+import ConfirmDialog from 'primevue/confirmdialog';
 import ToastService from 'primevue/toastservice';
+import ConfirmationService from 'primevue/confirmationservice';
+
 import Lieux from "@/views/Lieux.vue";
 
 
@@ -69,7 +73,10 @@ app.component('InputNumber', InputNumber)
 app.component('Dropdown', Dropdown)
 app.component('Toast', Toast)
 app.component('ContextMenu', ContextMenu)
+app.component('ConfirmPopup', ConfirmPopup)
+app.component('ConfirmDialog', ConfirmDialog)
 app.use(ToastService);
+app.use(ConfirmationService);
 
 
 const routes = [
