@@ -4,6 +4,7 @@ import {useRoute} from 'vue-router';
 import EvenementService from '@/services/EvenementService.js';
 import CustomTabMenu from "@/components/CustomTabMenu.vue";
 import {formatDate, formatDuree} from "@/utils/formatDate.js";
+import Commentaire from "@/components/Commentaire.vue";
 
 const route = useRoute();
 const evenementId = ref(route.params.id);
@@ -111,10 +112,10 @@ watchEffect(() => {
           </TabPanel>
         </TabPanel>
         <TabPanel header="Les Commentaires">
-          <p class="m-0">
-            At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui
-            officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus.
-          </p>
+          <Commentaire
+            :membreId="1"
+            :evenementId="Number(evenementId)"
+          />
         </TabPanel>
       </TabView>
     </div>

@@ -3,10 +3,10 @@ package main
 import (
 	"database/sql"
 	"fmt"
-	"net/http"
-
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	_ "github.com/lib/pq"
+	"net/http"
 )
 
 type Message struct {
@@ -29,8 +29,15 @@ func main() {
 
 	router := gin.Default()
 
+	// Ajouter le middleware CORS
+	config := cors.DefaultConfig()
+	config.AllowOrigins = []string{"*"}
+	config.AllowMethods = []string{"GET", "POST", "PUT", "DELETE"}
+	config.AllowHeaders = []string{"Origin", "Content-Type", "Content-Length", "Accept-Encoding", "X-CSRF-Token", "Authorization"}
+	router.Use(cors.New(config))
+
 	router.GET("/messages", getMessages)
-	router.GET("/messages")
+	router.GET("/messages/evenement/:event_id", getMessagesByEventID)
 	router.GET("/messages/:id", getMessage)
 	router.POST("/messages", createMessage)
 	router.PUT("/messages/:id", updateMessage)
@@ -77,6 +84,30 @@ func getMessage(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, message)
+}
+
+func getMessagesByEventID(c *gin.Context) {
+	eventID := c.Param("event_id")
+
+	rows, err := db.Query(`SELECT id, event_id, member_id, message FROM messages WHERE event_id=$1`, eventID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	defer rows.Close()
+
+	var messages []Message
+	for rows.Next() {
+		var message Message
+		err := rows.Scan(&message.ID, &message.EventID, &message.MemberID, &message.Message)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		messages = append(messages, message)
+	}
+
+	c.JSON(http.StatusOK, messages)
 }
 
 func createMessage(c *gin.Context) {
