@@ -46,9 +46,6 @@ public class LieuController {
 
     @PutMapping("/{id}")
     public ResponseEntity<LieuDto> updateLieu(@PathVariable("id") Long id, @RequestBody Lieu lieu){
-        if(isLieuExist(lieu)){
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
-        }
         if(!isLieuValid(lieu)){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

@@ -38,6 +38,7 @@ public class EvenementServiceImpl implements EvenementService {
         return evenementDtos;
     }
 
+    // Méthode pour récupérer tous les événements par lieu
     @Override
     public List<EvenementDto> getEvenementsByLieuId(Long id) {
         List<EvenementDto> evenementDtos = new ArrayList<>();
@@ -47,6 +48,7 @@ public class EvenementServiceImpl implements EvenementService {
         });
         return evenementDtos;
     }
+
 
 
     // Méthode pour récupérer un événement par son identifiant
@@ -65,6 +67,7 @@ public class EvenementServiceImpl implements EvenementService {
 
     // Méthode pour supprimer un événement par son identifiant
     public void deleteEvenementById(Long id) {
+        //supprimer les inscriptions de l'événement
         evenementRepository.deleteById(id);
     }
 

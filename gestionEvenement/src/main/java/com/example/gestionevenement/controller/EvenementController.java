@@ -88,6 +88,7 @@ public class EvenementController {
     public ResponseEntity<Void> deleteEvenement(@PathVariable("id") Long id) {
         EvenementDto evenement = evenementService.getEvenementById(id);
         if (evenement != null) {
+            inscriptionService.deleteInscriptionByEvenementId(id);
             evenementService.deleteEvenementById(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {

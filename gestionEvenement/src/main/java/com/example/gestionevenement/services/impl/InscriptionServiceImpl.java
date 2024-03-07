@@ -35,4 +35,9 @@ public class InscriptionServiceImpl implements InscriptionService {
         }
         return participants;
     }
+
+    @Override
+    public void deleteInscriptionByEvenementId(Long id) {
+        inscriptionRepository.deleteByEvenementId(id);
+    }
 }
