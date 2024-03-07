@@ -61,6 +61,26 @@ public class EvenementController {
         return new ResponseEntity<>(savedEvenement, HttpStatus.CREATED);
     }
 
+    //Ebpoint pour inscrire un membre à un événement
+    @PostMapping("/{id}/inscription")
+    public ResponseEntity<Object> inscrireMembre(@PathVariable("id") Long id, @RequestBody MembreDto membre) {
+        EvenementDto evenement = evenementService.getEvenementById(id);
+        if (evenement != null) {
+            //Vérifier si l'événement est complet
+            if (isEvenementComplet(id)) {
+                return new ResponseEntity<>("L'événement est complet", HttpStatus.INSUFFICIENT_STORAGE);
+            }
+            //Vérifier si le membre est déjà inscrit
+            if (isMembreInscrit(membre.getId(), id)) {
+                return new ResponseEntity<>("Le membre est déjà inscrit", HttpStatus.BAD_REQUEST);
+            }
+            inscriptionService.addParticipantToEvenement(id, membre.getId());
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<>("L'événement n'a pas été trouvé", HttpStatus.NOT_FOUND);
+        }
+    }
+
     // Endpoint pour mettre à jour un événement existant
     @PutMapping("/{id}")
     public ResponseEntity<Object> updateEvenement(@PathVariable("id") Long id, @RequestBody EvenementDto evenement) {

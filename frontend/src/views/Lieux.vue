@@ -134,8 +134,10 @@ const deleteLieu = async (id) => {
   try {
     const response = await LieuxService.deleteLieu(id);
     loadLieux();
+    toast.add({ severity: 'success', summary: 'Success Message', detail: 'Lieu supprimé avec succès', life: 3000 });
   } catch (error) {
     console.error('Error deleting lieu:', error);
+    toast.add({ severity: 'error', summary: 'Error Message', detail: 'Une erreur est survenue', life: 3000 });
   }
 };
 
