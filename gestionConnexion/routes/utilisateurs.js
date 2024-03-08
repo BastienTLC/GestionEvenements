@@ -53,6 +53,7 @@ router.get('/:id', async function(req, res, next) {
 /* POST utilisateur */
 router.post('/', async function(req, res, next) {
   try {
+    console.log(req.body);
     res.json(await utilisateurs.create(req.body));
   } catch (err) {
     console.error(`Error while creating utilisateur`, err.message);
@@ -97,7 +98,9 @@ router.post('/signup/', async function(req, res, next) {
     };
 
     const result = await utilisateurs.signup(userData);
+    console.log(result);
     const token = jwt.sign({ user: result.id }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
+    console.log(token);
 
     res.json({token: token});
   } catch (err) {

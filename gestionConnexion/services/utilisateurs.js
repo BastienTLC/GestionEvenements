@@ -36,7 +36,7 @@ async function getOne(id){
 
 async function create(utilisateur){
   const result = await db.query(
-    `INSERT INTO utilisateurs (nom_utilisater, mot_de_passe) VALUES (?, ?)`,
+    `INSERT INTO utilisateurs (nom_utilisateur, mot_de_passe) VALUES ($1, $2)`,
     [utilisateur.nom_utilisateur, utilisateur.mot_de_passe]  );
 
   let message = 'Error in creating utilisateur';
@@ -79,9 +79,10 @@ async function remove(id){
 
 async function signup(utilisateur){
   const rows = await db.query(
-    `INSERT INTO utilisateurs (nom_utilisateur, mot_de_passe) VALUES (?, ?)`,
+    `INSERT INTO utilisateurs (nom_utilisateur, mot_de_passe) VALUES ($1, $2)`,
     [utilisateur.nom_utilisateur, utilisateur.mot_de_passe]  );
   const data = helper.emptyOrRows(rows);
+  console.log(data);
 
   return {
     data
