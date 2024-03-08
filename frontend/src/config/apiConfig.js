@@ -5,3 +5,11 @@ export const apiConfig = {
     lieu: 'http://localhost:8083/lieux',
     commentaire: 'http://localhost:8080/messages'
 };
+
+export const membreLogin={
+    id:1,
+    nom: "Doe",
+    prenom: "John",
+    age: 30,
+    adresse: "123 Rue de la Liberté",
+}

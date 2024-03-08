@@ -1,10 +1,11 @@
 <script setup>
-import {ref, watchEffect} from 'vue';
+import {computed, ref, watchEffect} from 'vue';
 import {useRoute} from 'vue-router';
 import EvenementService from '@/services/EvenementService.js';
 import CustomTabMenu from "@/components/CustomTabMenu.vue";
 import {formatDate, formatDuree} from "@/utils/formatDate.js";
 import Commentaire from "@/components/Commentaire.vue";
+import {membreLogin} from "@/config/apiConfig.js";
 
 const route = useRoute();
 const evenementId = ref(route.params.id);
@@ -48,6 +49,11 @@ const getAvatarLabel = (member) => {
   return `${member.nom[0]}${member.prenom[0]}`;
 };
 
+const isMemberRegistered = computed(() => {
+  return members.value.some(membre => membre.id === membreLogin.id);
+});
+
+
 watchEffect(() => {
   loadEvenement(evenementId.value);
   loadEvenementLieu(evenementId.value)
@@ -57,7 +63,7 @@ watchEffect(() => {
 </script>
 
 <template>
-  <CustomTabMenu :selectedIndex="1"/>
+  <CustomTabMenu :selectedIndex="membreLogin.id"/>
   <!-- Afficher les détails de l'événement -->
   <div v-if="isLoading">
     <ProgressSpinner />
@@ -95,6 +101,11 @@ watchEffect(() => {
               <span class="font-medium text-secondary text-sm">Description</span>
               <span class="text-lg font-medium text-900">{{ evenement.description }}</span>
             </div>
+            <Divider />
+            <div v-if="isMemberRegistered" class="flex justify-content-center gap-2">
+              <Button label="Se desinscrire" class="p-button-danger" />
+            </div>
+
           </div>
         </TabPanel>
         <TabPanel header="Les Participants">

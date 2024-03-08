@@ -63,6 +63,7 @@ import PostEvenement from "@/views/modal/PostEvenement.vue";
 import EditEvenement from "@/views/modal/EditEvenement.vue";
 import evenementService from "@/services/EvenementService.js";
 import {useToast} from "primevue/usetoast";
+import {membreLogin} from "@/config/apiConfig.js";
 
 const toast = useToast();
 const router = useRouter();
@@ -122,7 +123,7 @@ const deleteEvenement = async () => {
 
 const rejoindreEvenement = async (evenement) => {
   try {
-    const response = await evenementService.inscrireMembre(evenement.id, 1);
+    const response = await evenementService.inscrireMembre(evenement.id, membreLogin.id);
     toast.add({severity: 'success', summary: 'Succès', detail: 'Vous avez rejoint evenement avec succès'});
     loadEvenements();
   }catch (error) {

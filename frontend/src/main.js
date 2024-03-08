@@ -1,7 +1,7 @@
 import './assets/main.css'
 import { createApp } from 'vue'
 import App from './App.vue'
-import 'primevue/resources/themes/aura-light-amber/theme.css'
+import 'primevue/resources/themes/aura-dark-teal/theme.css'
 import PrimeVue from 'primevue/config'
 import {createRouter, createWebHistory} from "vue-router";
 import 'primevue/resources/primevue.min.css'
