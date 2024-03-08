@@ -1,5 +1,7 @@
 <template>
   <CustomTabMenu :selectedIndex="activeIndex" />
+  <div>
+    <Toast />
   <div class="fixed-button-container z-5">
     <Button icon="pi pi-plus" rounded aria-label="Filter" size="large" class="p-button-lg" @click="CreateEventVisible = true" />
   </div>
@@ -13,7 +15,7 @@
           <div v-for="(item, index) in slotProps.items" @contextmenu="onRightClick($event, item)" :key="index" class="col-12">
             <div class="flex flex-column sm:flex-row sm:align-items-center p-4 gap-3" :class="{ 'border-top-1 surface-border': index !== 0 }">
               <div class="md:w-10rem relative">
-                <img class="block xl:block mx-auto border-round w-full" :src="`https://pbs.twimg.com/profile_images/1587790498684698625/MeI2W4h5_400x400.jpg`" :alt="item.name" />
+                <img class="block xl:block mx-auto border-round w-full" :src="`https://picsum.photos/200`" :alt="item.name" />
               </div>
               <div class="flex flex-column md:flex-row justify-content-between md:align-items-center flex-1 gap-4">
                 <div class="flex flex-row md:flex-column justify-content-between align-items-start gap-2">
@@ -31,7 +33,7 @@
                 <div class="flex flex-column md:align-items-end gap-5">
                   <span class="text-xl font-semibold text-900">{{ formatDate(item.dateEvenement) }}</span>
                   <div class="flex flex-row-reverse md:flex-row gap-2">
-                    <Button icon="pi pi-shopping-cart" label="Rejoindre" :disabled="item.inventoryStatus === 'FULL'" class="flex-auto md:flex-initial white-space-nowrap"></Button>
+                    <Button icon="pi pi-shopping-cart" @click="rejoindreEvenement(item)"  :label="`Rejoindre ${item.nombreParticipants}/${item.nombreMaxPersonnes}`" :disabled="item.nombreParticipants === item.nombreMaxPersonnes" class="flex-auto md:flex-initial white-space-nowrap"></Button>
                     <Button icon="pi pi-shopping-cart" label="Information" @click="openEventDetails(item.id)" class="flex-auto md:flex-initial white-space-nowrap"></Button>
                   </div>
                 </div>
@@ -42,10 +44,12 @@
         </div>
       </template>
     </DataView>
+
   </div>
   <div class="modal-container">
     <PostEvenement v-if="CreateEventVisible" v-model:visible="CreateEventVisible" @modalClose="handleModalClose" />
     <EditEvenement v-if="EditEventVisible" v-model:visible="EditEventVisible" :evenementToEdit="selectedEvenement" @modalClose="handleModalClose" />
+  </div>
   </div>
 </template>
 
@@ -57,7 +61,10 @@ import EvenementService from "@/services/EvenementService.js";
 import { formatDate} from "@/utils/formatDate.js";
 import PostEvenement from "@/views/modal/PostEvenement.vue";
 import EditEvenement from "@/views/modal/EditEvenement.vue";
+import evenementService from "@/services/EvenementService.js";
+import {useToast} from "primevue/usetoast";
 
+const toast = useToast();
 const router = useRouter();
 //Postion du tab
 const activeIndex = ref(1);
@@ -81,9 +88,24 @@ const items = ref([
 const loadEvenements = async () => {
   try {
     const response = await EvenementService.getAllEvenements();
-    console.log(response.data); // Affiche les données récupérées depuis l'API
+    console.log(response.data);
     evenements.value = response.data;
+    if (evenements.value.length === 0) {
+      return;
+    }
+    evenements.value.forEach(async (evenement) => {
+      evenement.nombreParticipants = await loadNombreParticipantsEvenement(evenement.id);
+    });
     isLoading.value = false;
+  } catch (error) {
+    console.error('Error loading evenements:', error);
+  }
+};
+
+const loadNombreParticipantsEvenement = async (id) => {
+  try {
+    const response = await EvenementService.getNombreParticipantsOfEvenement(id);
+    return response.data;
   } catch (error) {
     console.error('Error loading evenements:', error);
   }
@@ -95,6 +117,16 @@ const deleteEvenement = async () => {
     loadEvenements();
   } catch (error) {
     console.error('Error deleting evenement:', error);
+  }
+};
+
+const rejoindreEvenement = async (evenement) => {
+  try {
+    const response = await evenementService.inscrireMembre(evenement.id, 1);
+    toast.add({severity: 'success', summary: 'Succès', detail: 'Vous avez rejoint evenement avec succès'});
+    loadEvenements();
+  }catch (error) {
+    toast.add({severity: 'error', summary: 'Erreur pour rejoindre evenement', detail: error.response.data});
   }
 };
 

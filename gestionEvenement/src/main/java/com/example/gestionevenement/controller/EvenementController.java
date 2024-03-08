@@ -61,25 +61,21 @@ public class EvenementController {
         return new ResponseEntity<>(savedEvenement, HttpStatus.CREATED);
     }
 
-    //Ebpoint pour inscrire un membre à un événement
-    @PostMapping("/{id}/inscription")
-    public ResponseEntity<Object> inscrireMembre(@PathVariable("id") Long id, @RequestBody MembreDto membre) {
-        EvenementDto evenement = evenementService.getEvenementById(id);
-        if (evenement != null) {
-            //Vérifier si l'événement est complet
-            if (isEvenementComplet(id)) {
-                return new ResponseEntity<>("L'événement est complet", HttpStatus.INSUFFICIENT_STORAGE);
-            }
-            //Vérifier si le membre est déjà inscrit
-            if (isMembreInscrit(membre.getId(), id)) {
-                return new ResponseEntity<>("Le membre est déjà inscrit", HttpStatus.BAD_REQUEST);
-            }
-            inscriptionService.addParticipantToEvenement(id, membre.getId());
-            return new ResponseEntity<>(HttpStatus.CREATED);
-        } else {
-            return new ResponseEntity<>("L'événement n'a pas été trouvé", HttpStatus.NOT_FOUND);
+    //Enbpoint pour inscrire un membre à un événement a partir de son id
+    @PostMapping("/{idEvenement}/participants/{idMembre}")
+    public ResponseEntity<Object> addParticipantToEvenement(@PathVariable("idEvenement") Long idEvenement, @PathVariable("idMembre") Long idMembre) {
+        //Vérifier si l'événement est complet
+        if (isEvenementComplet(idEvenement)) {
+            return new ResponseEntity<>("L'événement est complet", HttpStatus.INSUFFICIENT_STORAGE);
         }
+        //Vérifier si le membre est déjà inscrit à l'événement
+        if (isMembreInscrit(idMembre, idEvenement)) {
+            return new ResponseEntity<>("Le membre est déjà inscrit à l'événement", HttpStatus.BAD_REQUEST);
+        }
+        inscriptionService.addParticipantToEvenement(idEvenement, idMembre);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
+
 
     // Endpoint pour mettre à jour un événement existant
     @PutMapping("/{id}")

@@ -11,8 +11,14 @@ export default {
     getEvenementById(id) {
         return axios.get(`${API_URL}/${id}`);
     },
+    getNombreParticipantsOfEvenement(id) {
+        return axios.get(`${API_URL}/${id}/participants/count`);
+    },
     createEvenement(evenementData) {
         return axios.post(`${API_URL}`, evenementData);
+    },
+    inscrireMembre(idEvenement, idMembre) {
+        return axios.post(`${API_URL}/${idEvenement}/participants/${idMembre}`);
     },
     updateEvenement(id, evenementData) {
         return axios.put(`${API_URL}/${id}`, evenementData);
