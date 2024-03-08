@@ -35,4 +35,17 @@ public class InscriptionServiceImpl implements InscriptionService {
         }
         return participants;
     }
+
+    @Override
+    public void addParticipantToEvenement(Long idEvenement, Long idMembre) {
+        Inscription inscription = new Inscription();
+        inscription.setEvenementId(idEvenement);
+        inscription.setMembreId(idMembre);
+        inscriptionRepository.save(inscription);
+    }
+
+    @Override
+    public void deleteInscriptionByEvenementId(Long id) {
+        inscriptionRepository.deleteByEvenementId(id);
+    }
 }

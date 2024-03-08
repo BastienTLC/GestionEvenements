@@ -1,7 +1,7 @@
 import './assets/main.css'
 import { createApp } from 'vue'
 import App from './App.vue'
-import 'primevue/resources/themes/aura-light-amber/theme.css'
+import 'primevue/resources/themes/aura-dark-teal/theme.css'
 import PrimeVue from 'primevue/config'
 import {createRouter, createWebHistory} from "vue-router";
 import 'primevue/resources/primevue.min.css'
@@ -9,7 +9,7 @@ import 'primeicons/primeicons.css'
 import 'primeflex/primeflex.css'
 
 import Home from './views/Home.vue'
-import About from './views/About.vue'
+import About from './views/Lieux.vue'
 import Evenements from './views/Evenements.vue'
 import EvenementDetails from "@/views/EvenementDetails.vue";
 
@@ -34,6 +34,14 @@ import StepperPanel from 'primevue/stepperpanel';
 import Calendar from "primevue/calendar";
 import InputNumber from 'primevue/inputnumber';
 import Dropdown from 'primevue/dropdown';
+import Toast from 'primevue/toast';
+import ContextMenu from 'primevue/contextmenu';
+import ConfirmPopup from 'primevue/confirmpopup';
+import ConfirmDialog from 'primevue/confirmdialog';
+import ToastService from 'primevue/toastservice';
+import ConfirmationService from 'primevue/confirmationservice';
+
+import Lieux from "@/views/Lieux.vue";
 
 
 
@@ -63,11 +71,17 @@ app.component('StepperPanel', StepperPanel)
 app.component('Calendar', Calendar)
 app.component('InputNumber', InputNumber)
 app.component('Dropdown', Dropdown)
+app.component('Toast', Toast)
+app.component('ContextMenu', ContextMenu)
+app.component('ConfirmPopup', ConfirmPopup)
+app.component('ConfirmDialog', ConfirmDialog)
+app.use(ToastService);
+app.use(ConfirmationService);
 
 
 const routes = [
   {path : "/" , component: Home},
-  {path : "/about" , component: About},
+  {path : "/lieux" , component: Lieux},
   {path : "/evenements" , component: Evenements},
   { path: "/evenements/:id", component: EvenementDetails },
 ]

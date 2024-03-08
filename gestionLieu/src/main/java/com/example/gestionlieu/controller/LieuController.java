@@ -31,8 +31,24 @@ public class LieuController {
         return lieu.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+    @PostMapping
+    public ResponseEntity<LieuDto> createLieu(@RequestBody Lieu lieu){
+
+        if(isLieuExist(lieu)){
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+        if(!isLieuValid(lieu)){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        LieuDto newLieu = lieuService.saveOrUpdateLieu(lieu);
+        return new ResponseEntity<>(newLieu, HttpStatus.CREATED);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<LieuDto> updateLieu(@PathVariable("id") Long id, @RequestBody Lieu lieu){
+        if(!isLieuValid(lieu)){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         LieuDto existingLieu = lieuService.getLieuById(id);
         if(existingLieu != null){
             lieu.setId(id);
@@ -45,8 +61,18 @@ public class LieuController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteLieu(@PathVariable("id") Long id){
+
         lieuService.deleteLieuById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    //fonction pour tester si un nouveau existe déjà même adresse
+    private boolean isLieuExist(Lieu lieu){
+        return lieuService.getAllLieux().stream().anyMatch(l -> l.getAdresse().equals(lieu.getAdresse()));
+    }
+    //fonction qui verifie que tous les champs sont non null et ne contiennent pas de valeurs vides
+    private boolean isLieuValid(Lieu lieu){
+        return lieu.getNom() != null && !lieu.getNom().isEmpty() && lieu.getAdresse() != null && !lieu.getAdresse().isEmpty() && lieu.getCapacite_accueil() != null;
     }
 
 }

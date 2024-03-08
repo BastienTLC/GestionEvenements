@@ -9,7 +9,9 @@ services:
     ports:
       - "8082:8082"
     restart: always
-  
+    networks:
+      - my_network
+
   membre-api:
     container_name: membre-api
     build:
@@ -18,6 +20,8 @@ services:
     ports:
       - "8081:8081" 
     restart: always
+    networks:
+      - my_network
 
   lieu-api:
     container_name: lieu-api
@@ -27,5 +31,20 @@ services:
     ports:
       - "8083:8083"
     restart: always
+    networks:
+      - my_network
 
+  commentaire-api:
+    container_name: commentaire-api
+    build:
+      context: ./GestionCommentaire
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    restart: always
+    networks:
+      - my_network    
 
+networks:
+  my_network:
+    driver: bridge

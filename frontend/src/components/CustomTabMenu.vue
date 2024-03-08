@@ -56,7 +56,7 @@ const visible = ref(false);
 const items = ref([
   { label: 'Dashboard', icon: 'pi pi-home', route: '/'},
   { label: 'Evenement', icon: 'pi pi-users', route:'/evenements' },
-  { label: 'About', icon: 'pi pi-list', route:'/about' },
+  { label: 'Lieux', icon: 'pi pi-list', route:'/lieux' },
   { label: 'Connexion', icon: 'pi pi-user', route:'/connexion' }
 ]);
 

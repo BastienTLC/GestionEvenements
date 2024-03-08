@@ -11,6 +11,9 @@ import java.util.Optional;
 public interface EvenementService {
     List<EvenementDto> getAllEvenements();
 
+    List<EvenementDto> getEvenementsByLieuId(Long id);
+
+
     EvenementDto getEvenementById(Long id);
 
     EvenementDto saveOrUpdateEvenement(EvenementDto evenement);
@@ -18,5 +21,7 @@ public interface EvenementService {
     void deleteEvenementById(Long id);
 
     LieuDto getLieuByEvenementId(Long id);
+
+
 
 }

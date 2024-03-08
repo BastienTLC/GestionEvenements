@@ -38,6 +38,19 @@ public class EvenementServiceImpl implements EvenementService {
         return evenementDtos;
     }
 
+    // Méthode pour récupérer tous les événements par lieu
+    @Override
+    public List<EvenementDto> getEvenementsByLieuId(Long id) {
+        List<EvenementDto> evenementDtos = new ArrayList<>();
+        List<Evenement> evenements = evenementRepository.findByLieuId(id);
+        evenements.forEach(evenement -> {
+            evenementDtos.add(evenementEntityToDto(evenement));
+        });
+        return evenementDtos;
+    }
+
+
+
     // Méthode pour récupérer un événement par son identifiant
     public EvenementDto getEvenementById(Long id) {
 
@@ -54,6 +67,7 @@ public class EvenementServiceImpl implements EvenementService {
 
     // Méthode pour supprimer un événement par son identifiant
     public void deleteEvenementById(Long id) {
+        //supprimer les inscriptions de l'événement
         evenementRepository.deleteById(id);
     }
 
@@ -70,6 +84,7 @@ public class EvenementServiceImpl implements EvenementService {
             throw new RuntimeException("Lieu not found", e);
         }
     }
+
 
 
     /**

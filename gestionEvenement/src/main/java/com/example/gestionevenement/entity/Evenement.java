@@ -21,7 +21,7 @@ public class Evenement {
     @Column(name = "date_evenement", nullable = false)
     private Date dateEvenement;
 
-    @Column(name = "heure", nullable = false)
+    @Column(name = "heure", nullable = true)
     private LocalTime heure;
 
     @Column(name = "duree", nullable = false)

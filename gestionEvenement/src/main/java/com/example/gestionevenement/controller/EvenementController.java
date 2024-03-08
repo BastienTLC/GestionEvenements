@@ -13,10 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
@@ -39,6 +36,13 @@ public class EvenementController {
         return new ResponseEntity<>(evenements, HttpStatus.OK);
     }
 
+    //Endpoint pour récupérer tous les événements d'un lieu
+    @GetMapping("/lieux/{id}")
+    public ResponseEntity<List<EvenementDto>> getEvenementsByLieuId(@PathVariable("id") Long id) {
+        List<EvenementDto> evenements = evenementService.getEvenementsByLieuId(id);
+        return new ResponseEntity<>(evenements, HttpStatus.OK);
+    }
+
     // Endpoint pour récupérer un événement par son identifiant
     @GetMapping("/{id}")
     public ResponseEntity<EvenementDto> getEvenementById(@PathVariable("id") Long id) {
@@ -56,6 +60,22 @@ public class EvenementController {
         EvenementDto savedEvenement = evenementService.saveOrUpdateEvenement(evenement);
         return new ResponseEntity<>(savedEvenement, HttpStatus.CREATED);
     }
+
+    //Enbpoint pour inscrire un membre à un événement a partir de son id
+    @PostMapping("/{idEvenement}/participants/{idMembre}")
+    public ResponseEntity<Object> addParticipantToEvenement(@PathVariable("idEvenement") Long idEvenement, @PathVariable("idMembre") Long idMembre) {
+        //Vérifier si l'événement est complet
+        if (isEvenementComplet(idEvenement)) {
+            return new ResponseEntity<>("L'événement est complet", HttpStatus.INSUFFICIENT_STORAGE);
+        }
+        //Vérifier si le membre est déjà inscrit à l'événement
+        if (isMembreInscrit(idMembre, idEvenement)) {
+            return new ResponseEntity<>("Le membre est déjà inscrit à l'événement", HttpStatus.BAD_REQUEST);
+        }
+        inscriptionService.addParticipantToEvenement(idEvenement, idMembre);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
 
     // Endpoint pour mettre à jour un événement existant
     @PutMapping("/{id}")
@@ -84,6 +104,7 @@ public class EvenementController {
     public ResponseEntity<Void> deleteEvenement(@PathVariable("id") Long id) {
         EvenementDto evenement = evenementService.getEvenementById(id);
         if (evenement != null) {
+            inscriptionService.deleteInscriptionByEvenementId(id);
             evenementService.deleteEvenementById(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
@@ -113,6 +134,8 @@ public class EvenementController {
         return new ResponseEntity<>(participants.size(), HttpStatus.OK);
     }
 
+
+
     //fonction qui retourne true si un évènement est complet
     public boolean isEvenementComplet(Long id) {
         EvenementDto evenement = evenementService.getEvenementById(id);
@@ -140,16 +163,32 @@ public class EvenementController {
             // Vérifier si les événements ont lieu au même endroit
             if (Objects.equals(e.getLieuId(), evenement.getLieuId())) {
                 // Convertir la durée de l'événement en millisecondes
-                long dureeEvenement = evenement.getDuree();
+                Long dureeEvenement = evenement.getDuree();
 
-                // Calculer les dates de début et de fin pour chaque événement
-                Date dateDebutEvenement1 = e.getDateEvenement();
-                Date dateFinEvenement1 = new Date(dateDebutEvenement1.getTime() + e.getDuree());
+                // Combiner la date et l'heure pour chaque événement
+                Calendar DateDebutEvenementCourant = Calendar.getInstance();
+                DateDebutEvenementCourant.setTime(e.getDateEvenement());
+                DateDebutEvenementCourant.set(Calendar.HOUR_OF_DAY, e.getHeure().getHour());
+                DateDebutEvenementCourant.set(Calendar.MINUTE, e.getHeure().getMinute());
+                DateDebutEvenementCourant.set(Calendar.SECOND, e.getHeure().getSecond());
+                Date dateDebutEvenement1 = DateDebutEvenementCourant.getTime();
 
-                Date dateDebutEvenement2 = evenement.getDateEvenement();
-                Date dateFinEvenement2 = new Date(dateDebutEvenement2.getTime() + evenement.getDuree());
+                Calendar DateFinEvenementCourant = Calendar.getInstance();
+                DateFinEvenementCourant.setTime(dateDebutEvenement1);
+                DateFinEvenementCourant.add(Calendar.MILLISECOND, e.getDuree().intValue());
+                Date dateFinEvenement1 = DateFinEvenementCourant.getTime();
 
+                Calendar dateDebutEvenementCree = Calendar.getInstance();
+                dateDebutEvenementCree.setTime(evenement.getDateEvenement());
+                dateDebutEvenementCree.set(Calendar.HOUR_OF_DAY, evenement.getHeure().getHour());
+                dateDebutEvenementCree.set(Calendar.MINUTE, evenement.getHeure().getMinute());
+                dateDebutEvenementCree.set(Calendar.SECOND, evenement.getHeure().getSecond());
+                Date dateDebutEvenement2 = dateDebutEvenementCree.getTime();
 
+                Calendar dateFinEvenementCree = Calendar.getInstance();
+                dateFinEvenementCree.setTime(dateDebutEvenement2);
+                dateFinEvenementCree.add(Calendar.MILLISECOND, dureeEvenement.intValue());
+                Date dateFinEvenement2 = dateFinEvenementCree.getTime();
 
                 // Vérifier s'il y a un chevauchement entre les deux événements
                 if ((dateDebutEvenement1.compareTo(dateFinEvenement2) <= 0 && dateFinEvenement1.compareTo(dateDebutEvenement2) >= 0) ||
