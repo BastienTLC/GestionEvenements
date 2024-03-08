@@ -54,7 +54,7 @@ public class MembreController {
     public ResponseEntity<MembreDto> newMembre(@RequestBody Membre membre) {
         MembreDto savedMembre = membreService.saveOrUpdateMembre(membre);
         System.out.println(savedMembre.getId());
-        String url = "http://localhost:3300/utilisateurs";
+        String url = "http://localhost:3300/utilisateurs/signup";
         String body = "{ \"nom_utilisateur\": \""+ savedMembre.getNom() +"\", \"mot_de_passe\": \"testspringboot\", \"membre_id\": "+savedMembre.getId()+"}";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
