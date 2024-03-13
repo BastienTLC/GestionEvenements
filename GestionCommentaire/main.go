@@ -36,14 +36,14 @@ func main() {
 	config.AllowHeaders = []string{"Origin", "Content-Type", "Content-Length", "Accept-Encoding", "X-CSRF-Token", "Authorization"}
 	router.Use(cors.New(config))
 
-	router.GET("/messages", getMessages)
-	router.GET("/messages/evenement/:event_id", getMessagesByEventID)
-	router.GET("/messages/:id", getMessage)
-	router.POST("/messages", createMessage)
-	router.PUT("/messages/:id", updateMessage)
-	router.DELETE("/messages/:id", deleteMessage)
+	router.GET("/", getMessages)
+	router.GET("/evenement/:event_id", getMessagesByEventID)
+	router.GET("/:id", getMessage)
+	router.POST("/", createMessage)
+	router.PUT("/:id", updateMessage)
+	router.DELETE("/:id", deleteMessage)
 
-	router.Run(":8080")
+	router.Run(":8085")
 }
 
 func getMessages(c *gin.Context) {
