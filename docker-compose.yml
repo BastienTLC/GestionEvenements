@@ -40,10 +40,38 @@ services:
       context: ./GestionCommentaire
       dockerfile: Dockerfile
     ports:
-      - "8080:8080"
+      - "8085:8085"
     restart: always
     networks:
       - my_network    
+
+  frontend:
+    container_name: frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    restart: always
+    networks:
+      - my_network
+  
+  nginx:
+    container_name: nginx
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - membre-api
+      - evenement-api
+      - lieu-api
+      - commentaire-api
+    networks:
+      - my_network
 
 networks:
   my_network:

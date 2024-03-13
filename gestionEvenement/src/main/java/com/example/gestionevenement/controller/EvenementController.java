@@ -15,9 +15,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "http://localhost:80")
 @RestController
-@RequestMapping("/evenements")
 public class EvenementController {
 
     @Autowired
@@ -56,6 +55,10 @@ public class EvenementController {
         //Vérifier si l'événement chevauche un autre événement
         if (isEvenementChevauche(evenement)) {
             return new ResponseEntity<>("L'événement chevauche un autre événement", HttpStatus.BAD_REQUEST);
+        }
+        //Vérifier si l'événement est complet
+        if (isEvenementComplet(evenement.getId())) {
+            return new ResponseEntity<>("L'événement est complet", HttpStatus.INSUFFICIENT_STORAGE);
         }
         EvenementDto savedEvenement = evenementService.saveOrUpdateEvenement(evenement);
         return new ResponseEntity<>(savedEvenement, HttpStatus.CREATED);

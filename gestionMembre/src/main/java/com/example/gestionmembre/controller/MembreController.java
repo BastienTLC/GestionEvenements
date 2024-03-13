@@ -19,9 +19,8 @@ import org.springframework.http.MediaType;
 import java.util.List;
 import java.util.Optional;
 
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "http://localhost:80")
 @RestController
-@RequestMapping("/membres")
 public class MembreController {
     @Autowired
     private MembreService membreService;

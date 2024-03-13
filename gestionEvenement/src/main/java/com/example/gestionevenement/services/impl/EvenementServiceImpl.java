@@ -75,7 +75,7 @@ public class EvenementServiceImpl implements EvenementService {
     public LieuDto getLieuByEvenementId(Long id) {
         Evenement evenement = evenementRepository.findById(id).orElseThrow(() -> new RuntimeException("Evenement not found"));
         Long LieuId = evenement.getLieuId();
-        String lieuUrl = "http://localhost:8083/lieux/" + LieuId;
+        String lieuUrl = "http://lieu-api:8083/" + LieuId;
         RestTemplate restTemplate = new RestTemplate();
         try {
             return restTemplate.getForObject(lieuUrl, LieuDto.class);

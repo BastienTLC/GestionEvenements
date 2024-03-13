@@ -22,14 +22,10 @@ public class InscriptionServiceImpl implements InscriptionService {
         List<MembreDto> participants = new ArrayList<>();
         RestTemplate restTemplate = new RestTemplate();
         for (Inscription inscription : inscriptions) {
-            // Récupérer l'ID du membre de l'inscription
             Long membreId = inscription.getMembreId();
-            // Construire l'URL de l'API membre avec l'ID du membre
-            String membreUrl = "http://localhost:8081/membres/" + membreId;
-            // Faire une requête GET à l'API membre
+            String membreUrl = "http://membre-api:8081/" + membreId;
             MembreDto membre = restTemplate.getForObject(membreUrl, MembreDto.class);
             if (membre != null) {
-                // Ajouter le membre à la liste des participants
                 participants.add(membre);
             }
         }

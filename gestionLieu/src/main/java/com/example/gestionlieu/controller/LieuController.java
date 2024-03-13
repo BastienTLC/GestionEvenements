@@ -12,9 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "http://localhost:80")
 @RestController
-@RequestMapping("/lieux")
 public class LieuController {
     @Autowired
     private LieuService lieuService;
