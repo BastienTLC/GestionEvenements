@@ -45,6 +45,18 @@ services:
     networks:
       - my_network    
 
+  docs-api:
+    image: swaggerapi/swagger-ui
+    container_name: docs-api
+    ports:
+        - "8086:8080"
+    volumes:
+        - ./docs:/usr/share/nginx/html/docs
+    environment:
+        API_URL: ./docs/doc.json
+    networks:
+      - my_network
+
   frontend:
     container_name: frontend
     build:
@@ -70,6 +82,7 @@ services:
       - evenement-api
       - lieu-api
       - commentaire-api
+      - docs-api
     networks:
       - my_network
 

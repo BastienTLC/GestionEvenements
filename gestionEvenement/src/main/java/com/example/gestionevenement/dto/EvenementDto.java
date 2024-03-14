@@ -16,8 +16,18 @@ public class EvenementDto {
 
     // Constructeurs, getters et setters
 
-    // Constructor
-    public EvenementDto() {}
+    public EvenementDto() {
+    }
+
+    public EvenementDto(Long id, String nom, Date dateEvenement, LocalTime heure, Long duree, Long lieuId, Integer nombreMaxPersonnes) {
+        this.id = id;
+        this.nom = nom;
+        this.dateEvenement = dateEvenement;
+        this.heure = heure;
+        this.duree = duree;
+        this.lieuId = lieuId;
+        this.nombreMaxPersonnes = nombreMaxPersonnes;
+    }
 
     // Getters and Setters
     public Long getId() {

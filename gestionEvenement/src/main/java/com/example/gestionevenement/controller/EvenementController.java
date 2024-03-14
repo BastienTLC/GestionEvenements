@@ -8,6 +8,7 @@ import com.example.gestionevenement.entity.Inscription;
 import com.example.gestionevenement.services.EvenementService;
 import com.example.gestionevenement.services.InscriptionService;
 import com.example.gestionevenement.services.impl.EvenementServiceImpl;
+import com.example.gestionevenement.services.impl.InscriptionServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,32 +25,59 @@ public class EvenementController {
     @Autowired
     private InscriptionService inscriptionService;
 
-    public EvenementController(EvenementServiceImpl evenementService) {
+    public EvenementController(EvenementServiceImpl evenementService, InscriptionServiceImpl inscriptionService) {
         this.evenementService = evenementService;
+        this.inscriptionService = inscriptionService;
     }
 
-    // Endpoint pour récupérer tous les événements
+    /**
+     * Récupère la liste de tous les événements.
+     *
+     * @return une liste contenant les détails de tous les événements.
+     * @response status 200 - La liste des événements a été récupérée avec succès.
+     */
     @GetMapping
     public ResponseEntity<List<EvenementDto>> getAllEvenements() {
         List<EvenementDto> evenements = evenementService.getAllEvenements();
         return new ResponseEntity<>(evenements, HttpStatus.OK);
     }
 
-    //Endpoint pour récupérer tous les événements d'un lieu
+    /**
+     * Récupère la liste des événements par lieu.
+     *
+     * @param id l'identifiant du lieu.
+     * @return une liste contenant les détails de tous les événements ayant lieu dans le lieu spécifié.
+     * @response status 200 - La liste des événements a été récupérée avec succès.
+     */
     @GetMapping("/lieux/{id}")
     public ResponseEntity<List<EvenementDto>> getEvenementsByLieuId(@PathVariable("id") Long id) {
         List<EvenementDto> evenements = evenementService.getEvenementsByLieuId(id);
         return new ResponseEntity<>(evenements, HttpStatus.OK);
     }
 
-    // Endpoint pour récupérer un événement par son identifiant
+    /**
+     * Récupère les détails d'un événement à partir de son identifiant.
+     *
+     * @param id l'identifiant de l'événement.
+     * @return les détails de l'événement.
+     * @response status 200 - Les détails de l'événement ont été récupérés avec succès.
+     * @response status 404 - L'événement n'a pas été trouvé.
+     */
     @GetMapping("/{id}")
     public ResponseEntity<EvenementDto> getEvenementById(@PathVariable("id") Long id) {
         Optional<EvenementDto> evenement = Optional.ofNullable(evenementService.getEvenementById(id));
         return evenement.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    // Endpoint pour créer un nouvel événement
+    /**
+     * Crée un nouvel événement.
+     *
+     * @param evenement les détails de l'événement à créer.
+     * @return les détails de l'événement créé.
+     * @response status 201 - L'événement a été créé avec succès.
+     * @response status 400 - L'événement chevauche un autre événement.
+     * @response status 507 - L'événement est complet.
+     */
     @PostMapping
     public ResponseEntity<Object> createEvenement(@RequestBody EvenementDto evenement) {
         //Vérifier si l'événement chevauche un autre événement
@@ -64,7 +92,15 @@ public class EvenementController {
         return new ResponseEntity<>(savedEvenement, HttpStatus.CREATED);
     }
 
-    //Enbpoint pour inscrire un membre à un événement a partir de son id
+    /**
+     * Ajoute un participant à un événement.
+     *
+     * @param idEvenement l'identifiant de l'événement.
+     * @param idMembre    l'identifiant du membre.
+     * @response status 201 - Le participant a été ajouté à l'événement avec succès.
+     * @response status 400 - Le membre est déjà inscrit à l'événement.
+     * @response status 507 - L'événement est complet.
+     */
     @PostMapping("/{idEvenement}/participants/{idMembre}")
     public ResponseEntity<Object> addParticipantToEvenement(@PathVariable("idEvenement") Long idEvenement, @PathVariable("idMembre") Long idMembre) {
         //Vérifier si l'événement est complet
@@ -80,7 +116,17 @@ public class EvenementController {
     }
 
 
-    // Endpoint pour mettre à jour un événement existant
+    /**
+     * Met à jour les détails d'un événement.
+     *
+     * @param id        l'identifiant de l'événement.
+     * @param evenement les nouveaux détails de l'événement.
+     * @return les détails de l'événement mis à jour.
+     * @response status 200 - Les détails de l'événement ont été mis à jour avec succès.
+     * @response status 400 - L'événement chevauche un autre événement.
+     * @response status 507 - L'événement est complet.
+     * @response status 404 - L'événement n'a pas été trouvé.
+     */
     @PutMapping("/{id}")
     public ResponseEntity<Object> updateEvenement(@PathVariable("id") Long id, @RequestBody EvenementDto evenement) {
         EvenementDto existingEvenement = evenementService.getEvenementById(id);
@@ -102,7 +148,13 @@ public class EvenementController {
     }
 
 
-    // Endpoint pour supprimer un événement
+    /**
+     * Supprime un événement.
+     *
+     * @param id l'identifiant de l'événement.
+     * @response status 204 - L'événement a été supprimé avec succès.
+     * @response status 404 - L'événement n'a pas été trouvé.
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteEvenement(@PathVariable("id") Long id) {
         EvenementDto evenement = evenementService.getEvenementById(id);
@@ -115,22 +167,39 @@ public class EvenementController {
         }
     }
 
-    // Endpoint pour récupérer les participants d'un événement
+    /**
+     * Récupère la liste des participants d'un événement.
+     *
+     * @param id l'identifiant de l'événement.
+     * @return une liste contenant les détails de tous les participants de l'événement.
+     * @response status 200 - La liste des participants de l'événement a été récupérée avec succès.
+     */
     @GetMapping("/{id}/participants")
     public ResponseEntity<List<MembreDto>> getParticipantsOfEvenement(@PathVariable("id") Long id) {
         List<MembreDto> participants = inscriptionService.getParticipantsOfEvenement(id);
         return new ResponseEntity<>(participants, HttpStatus.OK);
     }
 
-    //Endpoint pour récupérer le lieu d'un événement
-
+    /**
+     * Récupère le lieu d'un événement.
+     *
+     * @param id l'identifiant de l'événement.
+     * @return les détails du lieu de l'événement.
+     * @response status 200 - Les détails du lieu de l'événement ont été récupérés avec succès.
+     */
     @GetMapping("/{id}/lieu")
     public ResponseEntity<LieuDto> getLieuByEvenementId(@PathVariable("id") Long id) {
         LieuDto lieu = evenementService.getLieuByEvenementId(id);
         return new ResponseEntity<>(lieu, HttpStatus.OK);
     }
 
-    //Endpoint pour récupérer le nombre de participants d'un événement
+    /**
+     * Récupère le nombre de participants d'un événement.
+     *
+     * @param id l'identifiant de l'événement.
+     * @return le nombre de participants de l'événement.
+     * @response status 200 - Le nombre de participants de l'événement a été récupéré avec succès.
+     */
     @GetMapping("/{id}/participants/count")
     public ResponseEntity<Integer> getNombreParticipantsOfEvenement(@PathVariable("id") Long id) {
         List<MembreDto> participants = inscriptionService.getParticipantsOfEvenement(id);
@@ -138,15 +207,25 @@ public class EvenementController {
     }
 
 
-
-    //fonction qui retourne true si un évènement est complet
+    /**
+     * Vérifie si un événement est complet.
+     *
+     * @param id l'identifiant de l'événement.
+     * @return true si l'événement est complet, sinon false.
+     */
     public boolean isEvenementComplet(Long id) {
         EvenementDto evenement = evenementService.getEvenementById(id);
         LieuDto lieu = evenementService.getLieuByEvenementId(id);
         return Objects.equals(evenement.getNombreMaxPersonnes(), lieu.getCapacite_accueil());
     }
 
-    //fonction qui retourne true si un membre est inscrit à un évènement
+    /**
+     * Vérifie si un membre est inscrit à un événement.
+     *
+     * @param idMembre    l'identifiant du membre.
+     * @param idEvenement l'identifiant de l'événement.
+     * @return true si le membre est inscrit à l'événement, sinon false.
+     */
     public boolean isMembreInscrit(Long idMembre, Long idEvenement) {
         List<MembreDto> participants = inscriptionService.getParticipantsOfEvenement(idEvenement);
         /*for (MembreDto participant : participants) {
@@ -158,7 +237,12 @@ public class EvenementController {
         return participants.stream().anyMatch(participant -> participant.getId().equals(idMembre));
     }
 
-    //fonction qui retourne true si un evenement en cours de création chevauche un autre evenement
+    /**
+     * Vérifie si un événement chevauche un autre événement.
+     *
+     * @param evenement les détails de l'événement.
+     * @return true si l'événement chevauche un autre événement, sinon false.
+     */
     public boolean isEvenementChevauche(EvenementDto evenement) {
         List<EvenementDto> evenements = evenementService.getAllEvenements();
 
