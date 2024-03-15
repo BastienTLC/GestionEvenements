@@ -17,10 +17,29 @@ L'application gère les événements d'une association et de ses membres. Elle p
 
 L'application est composée de plusieurs API :
 
-- Membres API : pour gérer les membres de l'association
-- Événements API : pour gérer les événements de l'association
-- Lieux API : pour gérer les lieux des événements
-- Commentaires API : pour gérer les commentaires des membres sur les événements
-- Docs API : pour générer la documentation de l'application
+- Front (localhost:80)
+- Membres API : pour gérer les membres de l'association (localhost/membres-api) 
+- Événements API : pour gérer les événements de l'association (localhost/evenements-api)
+- Lieux API : pour gérer les lieux des événements (localhost/lieux-api)
+- Commentaires API : pour gérer les commentaires des membres sur les événements (localhost/commentaires-api)
+- Docs API : pour générer la documentation de l'application (localhost/docs-api) si problème (localhost:8086)
+
+
+## Setup
+
+`docker-compose up`
+
+## Todo
+
+ - Implementation de l'auth-api au front
+
+## Autre
+
+  - Le role de la core-api est joué par le revers-proxy nginx
+  - Deux version de commentaires-api
+       - Version servelet fonctionnelle mais problème de conteneurisation.
+       - Version faite en Go implementer pour palier le problème de la servelet
+  - Auth-api faite en Node JS 
+
 
 
